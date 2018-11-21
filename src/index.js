@@ -5,7 +5,27 @@ import frFR from 'antd/lib/locale-provider/fr_FR';
 import moment from 'moment';
 import 'moment/locale/fr';
 import 'antd/dist/antd.css'; // or antd/lib/button/style/css for css format file
-
+import {createStore,applyMiddleware,compose} from 'redux'
+import thunk from 'redux-thunk'
+import {Provider} from 'react-redux'
+import reducers  from './redux/reducers'
 import './index.css';
+const reduxDevTools=window.devToolsExtension?window.devToolsExtension():f=>f
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store=createStore(reducers,compose(applyMiddleware(thunk),reduxDevTools))
+
+function render(){
+    ReactDOM.render(
+    (
+      <Provider store={store}>
+    <App store={store}></App>
+    </Provider>
+    )
+    ,
+      document.getElementById("root"))
+  }
+  
+  store.subscribe(()=>{
+    render()
+  })
+  render()
