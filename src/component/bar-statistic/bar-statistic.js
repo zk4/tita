@@ -171,7 +171,7 @@ class BarStatistic extends Component {
         {this.props.stat}
         <ReactEcharts
           option={this.getOption()}
-          style={{ height: "300px", width: "100%" }}
+          style={{ height: "200px", width: "100%" }}
           className="react_for_echarts"
         />
         <Select

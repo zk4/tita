@@ -4,18 +4,17 @@ import App from './App';
 import frFR from 'antd/lib/locale-provider/fr_FR';
 import moment from 'moment';
 import 'moment/locale/fr';
-import 'antd/dist/antd.css'; // or antd/lib/button/style/css for css format file
-import {createStore,applyMiddleware,compose} from 'redux'
-import thunk from 'redux-thunk'
+import 'antd/dist/antd.css'; 
+import {createStore,applyMiddleware,compose} from 'redux';
+import thunk from 'redux-thunk';
 import {Provider} from 'react-redux'
 import reducers  from './redux/reducers'
 import './index.css';
 import {rolling } from  './util/mac-api';
-const reduxDevTools=window.devToolsExtension?window.devToolsExtension():f=>f
 
+const reduxDevTools=window.devToolsExtension?window.devToolsExtension():f=>f
 const store=createStore(reducers,compose(applyMiddleware(thunk),reduxDevTools))
  
-
 ReactDOM.render( (
   <Provider store={store}>
 <App store={store}></App>
@@ -26,6 +25,5 @@ ReactDOM.render( (
   setInterval(async () => {
     console.log( await rolling());      
   }, 2000);
-
 })();
  

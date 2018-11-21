@@ -1,7 +1,7 @@
 let exec = window.require("child_process").exec;
 let osascript = window.require("node-osascript");
 
-// export class Api {
+
 async function getCurrentProcss() {
   let cmd =
     'tell application "System Events" to get name of application processes whose frontmost is true and visible is true';
@@ -15,11 +15,11 @@ async function getActiveUrl() {
 }
 
 async function getActiveNameAndUrl() {
-  let cmd_name =
+  let webTitleCmd =
     'tell application "Google Chrome" to return  name  of front window';
   let url = await getActiveUrl();
-  let name = await runAppleScript(cmd_name);
-  return [name, url];
+  let webTitle = await runAppleScript(webTitleCmd);
+  return {webTitle, url};
 }
 
 function runAppleScript(script) {
@@ -33,14 +33,14 @@ function runAppleScript(script) {
     });
   });
 }
-// }
+
 export async function rolling() {
   let current_process = (await getCurrentProcss())[0];
-
+  let timeStamp=new Date()
   if (current_process === "Google Chrome") {
-    return [current_process,await getActiveUrl()]
+    return {"processName":current_process,...await getActiveNameAndUrl(),timeStamp}
   } else {
-    return [current_process,""]
+    return{"processName":current_process,timeStamp}
   }
 }
 

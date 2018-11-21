@@ -28,11 +28,11 @@ const { app } = window.require("electron").remote;
 
 class App extends Component {
   render() {
-    const style = { height:"1000px" };
+    const style = { height:"400px" };
     return (
       <div className="App">
         <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab="Tab 1" key="1">
+          <TabPane tab="Overview" key="1">
             <div style={{ padding: "5px 100px " }}>
               <List
                 grid={{ gutter: 16, column: 4 }}
