@@ -1,5 +1,5 @@
-let exec = require("child_process").exec;
-let osascript = require("node-osascript");
+let exec = window.require("child_process").exec;
+let osascript = window.require("node-osascript");
 
 // export class Api {
 async function getCurrentProcss() {

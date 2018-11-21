@@ -10,22 +10,22 @@ import thunk from 'redux-thunk'
 import {Provider} from 'react-redux'
 import reducers  from './redux/reducers'
 import './index.css';
+import {rolling } from  './util/mac-api';
 const reduxDevTools=window.devToolsExtension?window.devToolsExtension():f=>f
 
 const store=createStore(reducers,compose(applyMiddleware(thunk),reduxDevTools))
+ 
 
-function render(){
-    ReactDOM.render(
-    (
-      <Provider store={store}>
-    <App store={store}></App>
-    </Provider>
-    )
-    ,
-      document.getElementById("root"))
-  }
-  
-  store.subscribe(()=>{
-    render()
-  })
-  render()
+ReactDOM.render( (
+  <Provider store={store}>
+<App store={store}></App>
+</Provider>
+), document.getElementById('root'));
+
+(async () => {
+  setInterval(async () => {
+    console.log( await rolling());      
+  }, 2000);
+
+})();
+ 
