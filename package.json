@@ -21,6 +21,7 @@
     "update-electron-app": "^1.2.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "concurrently": "3.5.1",
     "electron": "2.0.2",
     "electron-builder": "^20.15.1",
@@ -44,5 +45,13 @@
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      "transform-decorators-legacy"
+    ]
   }
 }

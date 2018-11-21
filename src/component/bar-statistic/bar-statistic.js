@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
+import {connect} from 'react-redux'
 import { Button, Select } from "antd";
 import {api} from "../../util/mac-api";
-
+import {addStatEvent} from '../../redux/stat.redux'
 const Option = Select.Option;
 const timeSpan = {
   day: [
@@ -43,12 +44,18 @@ const rawData={
 
     }
 }
-export default class BarStatistic extends Component {
+
+ 
+class BarStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
       timeGroupKey: "day"
     };
+
+  }
+  componentDidMount(){
+    console.log(this.props)
   }
   groupData(data,groupKey){
 
@@ -157,10 +164,11 @@ export default class BarStatistic extends Component {
     });
     console.log(v); // { key: "lucy", label: "Lucy (101)" }
   }
-
+ 
   render() {
     return (
       <div>
+        {this.props.stat}
         <ReactEcharts
           option={this.getOption()}
           style={{ height: "300px", width: "100%" }}
@@ -177,7 +185,13 @@ export default class BarStatistic extends Component {
           <Option value="month">month</Option>
           <Option value="year">year</Option>
         </Select>
+        
+        <Button onClick={this.props.addStatEvent}>add one</Button>
       </div>
     );
   }
 }
+
+export default 
+connect(state=>state,{addStatEvent})
+(BarStatistic);
