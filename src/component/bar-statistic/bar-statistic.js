@@ -1,64 +1,143 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
-import {connect} from 'react-redux'
-import { Button, Select } from "antd";
-import {api} from "../../util/mac-api";
-import {addStatEvent} from '../../redux/stat.redux'
+import { connect } from "react-redux";
+import { config } from "../../config";
+import { Button, Switch, Select } from "antd";
+import moment from "moment";
 const Option = Select.Option;
-const timeSpan = {
-  day: [
-    "0点",
-    "1点",
-    "2点",
-    "3点",
-    "4点",
-    "5点",
-    "6点",
-    "7点",
-    "8点",
-    "9点",
-    "10点",
-    "11点",
-    "12点",
-    "13点",
-    "14点",
-    "15点",
-    "16点",
-    "17点",
-    "18点",
-    "19点",
-    "20点",
-    "21点",
-    "22点",
-    "23点",
-    "24点"
-  ],
-  week: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期天"],
-  month:[1,2,3,4,5,6,7,8,9,10,11,12],
-  year:[2018,2019,2020,2021]
-};
-const rawData={
-    "web":{
-        "title":"youtube",
-        "timeStamp":new Date()
 
-    }
-}
-
- 
 class BarStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timeGroupKey: "day"
+      timeGroupKey: "day",
+      bAutoRefresh: true,
+      data: {
+        Productive: [],
+        Neutral: [],
+        Distracting: []
+      }
+    };
+   
+  }
+  onSwitch(checked) {
+    this.setState(
+      {
+        bAutoRefresh: checked
+      },
+      () => {
+        if (checked) {
+          this.componentDidMount();
+        }else{
+          this.componentWillUnmount();
+        }
+      }
+    );
+  }
+  
+  componentDidMount() {
+    
+    if (this.state.bAutoRefresh) {
+     
+      this.interval = setInterval(() => {
+        this.groupData();
+      }, config.intervalSec * 1000);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.interval) clearInterval(this.interval);
+  }
+  handleChange(v) {
+    this.setState({
+      timeGroupKey: v.key
+    });
+    this.groupData();
+  }
+  // arrayInSpan(key, year, month) {
+  //   switch (key) {
+  //     case "minute":
+  //       return Array(60).fill(0);
+  //     case "hour":
+  //       return Array(60).fill(0);
+  //     case "day":
+  //       return Array(24).fill(0);
+  //     case "week":
+  //       return Array(7).fill(0);
+  //     case "month":
+  //       return Array(new Date(year, month, 0).getDate()).fill(0);
+  //     case "year":
+  //       return Array(12).fill(0);
+  //     case "years":
+  //       return Array(5).fill(0);
+  //     default:
+  //       break;
+  //   }
+  // }
+
+  getTimeFormat() {
+    let groupKey = this.state.timeGroupKey;
+    switch (groupKey) {
+      case "minute":
+        return "s";
+      case "hour":
+        return "m";
+      case "day":
+        return "H";
+      case "week":
+        return "d";
+      case "month":
+        return "DD";
+      case "year":
+        return "M";
+      case "years":
+        return "YYYY";
+      default:
+        break;
+    }
+  }
+  getAxis() {
+    let groupKey = this.state.timeGroupKey;
+    switch (groupKey) {
+      case "minute":
+        return [...Array(60).keys()];
+      case "hour":
+        return [...Array(60).keys()];
+      case "day":
+        return [...Array(24).keys()];
+      case "week":
+        return [...Array(7).keys()];
+      case "month":
+        return [
+          ...Array(
+            new Date(moment().year(), moment().month(), 0).getDate()
+          ).keys()
+        ];
+      case "year":
+        return [...Array(12).keys()];
+      case "years":
+        return [...Array(5).keys()].map(v => moment().year() - v);
+
+      default:
+        break;
+    }
+  }
+  groupData() {
+    let length = this.getAxis().length;
+    let data = {
+      Productive: Array(length).fill(0),
+      Neutral: Array(length).fill(0),
+      Distracting: Array(length).fill(0)
     };
 
-  }
-  componentDidMount(){
-    console.log(this.props)
-  }
-  groupData(data,groupKey){
+    let timeFormat = this.getTimeFormat();
+    for (let v of this.props.stat) {
+      const idx = moment(v.start).format(timeFormat);
+      // console.log("idx",idx)
+      data[v.type][idx] += v.duration;
+    }
 
+    this.setState({ data: data });
   }
   getOption() {
     return {
@@ -79,22 +158,16 @@ class BarStatistic extends Component {
         containLabel: true
       },
       yAxis: {
-        type: "value"
+        type: "value",
+        max:'dataMax'
       },
       xAxis: {
         type: "category",
-        data: timeSpan[this.state.timeGroupKey]
+        data: this.getAxis()
       },
-      color: [
-        "#9DE949",
-        "#23BBD8",
-        "#FF6377",
-       
-      ],
+      color: ["#9DE949", "#23BBD8", "#FF6377"],
       series: [
         {
-         
-
           name: "Productive",
           type: "bar",
           stack: "总量",
@@ -104,31 +177,7 @@ class BarStatistic extends Component {
               position: "insideRight"
             }
           },
-          data: [
-            320,
-            302,
-            301,
-            334,
-            320,
-            302,
-            301,
-            334,
-            320,
-            302,
-            301,
-            334,
-            320,
-            302,
-            301,
-            334,
-            320,
-            302,
-            301,
-            334,
-            390,
-            330,
-            320
-          ]
+          data: this.state.data.Productive
         },
         {
           name: "Neutral",
@@ -140,8 +189,8 @@ class BarStatistic extends Component {
               position: "insideRight"
             }
           },
-         
-          data: [120, 132, 101, 134, 90, 230, 210]
+
+          data: this.state.data.Neutral
         },
         {
           name: "Distracting",
@@ -153,22 +202,16 @@ class BarStatistic extends Component {
               position: "insideRight"
             }
           },
-          data: [260, 182, 191, 234, 290, 330, 310]
+          data: this.state.data.Distracting
         }
       ]
     };
   }
-  handleChange(v) {
-    this.setState({
-      timeGroupKey: v.key
-    });
-    console.log(v); // { key: "lucy", label: "Lucy (101)" }
-  }
- 
+
   render() {
     return (
       <div>
-        {this.props.stat}
+        {/* {this.props.stat} */}
         <ReactEcharts
           option={this.getOption()}
           style={{ height: "200px", width: "100%" }}
@@ -180,18 +223,24 @@ class BarStatistic extends Component {
           style={{ width: 120 }}
           onChange={e => this.handleChange(e)}
         >
+          {/* <Option value="minute">minute</Option> */}
+          {/* <Option value="hour">hour</Option> */}
           <Option value="day">day</Option>
           <Option value="week">week</Option>
           <Option value="month">month</Option>
           <Option value="year">year</Option>
         </Select>
-        
-        <Button onClick={this.props.addStatEvent}>add one</Button>
+
+        <Switch
+          defaultChecked={this.state.bAutoRefresh}
+          onChange={e => this.onSwitch(e)}
+        />
       </div>
     );
   }
 }
 
-export default 
-connect(state=>state,{addStatEvent})
-(BarStatistic);
+export default connect(
+  state => state,
+  {   }
+)(BarStatistic);

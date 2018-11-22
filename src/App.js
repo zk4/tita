@@ -4,7 +4,7 @@ import { List, Tabs, Card } from "antd";
 
 import BarStatistic from "./component/bar-statistic/bar-statistic";
 import CircleStatistic from "./component/circle-statistic/circle-statistic";
-
+  
 const TabPane = Tabs.TabPane;
 const data = [
   {

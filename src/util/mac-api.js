@@ -1,6 +1,9 @@
+import moment from "moment";
+import { config } from "../config";
 let exec = window.require("child_process").exec;
-let osascript = window.require("node-osascript");
+let url = window.require("url");
 
+let osascript = window.require("node-osascript");
 
 async function getCurrentProcss() {
   let cmd =
@@ -14,12 +17,14 @@ async function getActiveUrl() {
   return await runAppleScript(cmd);
 }
 
+async function getWebName() {
+  let cmd = 'tell application "Google Chrome" to return  name  of front window';
+  return await runAppleScript(cmd);
+}
 async function getActiveNameAndUrl() {
-  let webTitleCmd =
-    'tell application "Google Chrome" to return  name  of front window';
   let url = await getActiveUrl();
-  let webTitle = await runAppleScript(webTitleCmd);
-  return {webTitle, url};
+  let name = await getWebName();
+  return { name, url };
 }
 
 function runAppleScript(script) {
@@ -33,22 +38,49 @@ function runAppleScript(script) {
     });
   });
 }
-
-export async function rolling() {
-  let current_process = (await getCurrentProcss())[0];
-  let timeStamp=new Date()
-  if (current_process === "Google Chrome") {
-    return {"processName":current_process,...await getActiveNameAndUrl(),timeStamp}
-  } else {
-    return{"processName":current_process,timeStamp}
+function getType(name) {
+ 
+  if (config.typeNameMaps.productive.indexOf(name) != -1) {
+    return "Productive";
   }
+
+  if (config.typeNameMaps.distracting.indexOf(name) != -1) {
+    return "Distracting";
+  }
+  return "Neutral";
+}
+function getCategory(name) {
+  for (let key of Object.keys(config.categoryNameMaps)) {
+  
+    if (config.categoryNameMaps[key].indexOf(name) != -1) {
+      return key;
+    }
+  }
+  return "uncategory";
+}
+export async function rolling() {
+  let processName = (await getCurrentProcss())[0];
+  let name = processName;
+  let timeStamp = moment().format();
+  if (processName === "Google Chrome") {
+    name = await getActiveUrl();
+    name = url.parse(name).hostname;
+  }
+  return {
+    name,
+    processName,
+    subTask: [],
+    category: getCategory(name),
+    type: getType(name),
+    start: timeStamp,
+    duration: config.intervalSec
+  };
 }
 
-
-// demo 
+// demo
 // (async () => {
 //   setInterval(async () => {
-//     console.log( await rolling());      
+//     console.log( await rolling());
 //   }, 2000);
 
 // })();
