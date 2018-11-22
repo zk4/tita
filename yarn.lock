@@ -7203,6 +7203,10 @@ react-json-editor-ajrm@^2.5.8:
   dependencies:
     "@babel/runtime" "^7.0.0-rc.0"
 
+react-json-editor@^0.3.0:
+  version "0.3.0"
+  resolved "http://registry.npm.taobao.org/react-json-editor/download/react-json-editor-0.3.0.tgz#672dd7ce9b46c2696d6fab7e40547e9b4c220618"
+
 react-lazy-load@^3.0.13:
   version "3.0.13"
   resolved "http://registry.npm.taobao.org/react-lazy-load/download/react-lazy-load-3.0.13.tgz#3b0a92d336d43d3f0d73cbe6f35b17050b08b824"
