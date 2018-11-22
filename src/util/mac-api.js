@@ -62,18 +62,34 @@ function getCategory(name) {
 export async function rolling() {
   let processName = (await getCurrentProcss())[0];
   let name = processName;
-  let timeStamp = moment().format();
+  let timeStamp = moment();
   if (processName === "Google Chrome") {
     name = await getActiveUrl();
     name = url.parse(name).hostname;
   }
+  /*
+  case "day":
+        return "H";
+      case "week":
+        return "d";
+      case "month":
+        return "DD";
+      case "year":
+        return "M";
+  */
   return {
     name,
     processName,
-    subTask: [],
-    category: getCategory(name),
-    type: getType(name),
-    start: timeStamp,
+    subTask   : [],
+    category  : getCategory(name),
+    type      : getType(name),
+    start     : timeStamp.format(),
+    timeFormat: {
+      day  : timeStamp.format("H"),
+      week : timeStamp.format("d"),
+      month: timeStamp.format("DD"),
+      year : timeStamp.format("M"),
+    },
     duration: config.intervalSec
   };
 }

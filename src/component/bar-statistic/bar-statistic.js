@@ -1,11 +1,17 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
-import   {getConfig}   from "../../util/configUtil";
-import {  Switch, Select } from "antd";
+import { getConfig } from "../../util/configUtil";
+import { Switch, Select } from "antd";
 import moment from "moment";
 const Option = Select.Option;
-let config =getConfig()
+let config = getConfig();
+let yAxisMax={
+  "day":3600,
+  "week":3600,
+  "month":3600,
+  "year":3600,
+}
 class BarStatistic extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +22,8 @@ class BarStatistic extends Component {
         Productive: [],
         Neutral: [],
         Distracting: []
-      }
+      },
+      xAxisCache: {}
     };
   }
   onSwitch(checked) {
@@ -75,10 +82,10 @@ class BarStatistic extends Component {
   getTimeFormat() {
     let groupKey = this.state.timeGroupKey;
     switch (groupKey) {
-      case "minute":
-        return "s";
-      case "hour":
-        return "m";
+      // case "minute":
+      //   return "s";
+      // case "hour":
+      //   return "m";
       case "day":
         return "H";
       case "week":
@@ -87,49 +94,65 @@ class BarStatistic extends Component {
         return "DD";
       case "year":
         return "M";
-      case "years":
-        return "YYYY";
+      // case "years":
+      //   return "YYYY";
       default:
         break;
     }
   }
-  getAxis() {
+
+  getxAxis() {
     let groupKey = this.state.timeGroupKey;
+    if (groupKey in this.state.xAxisCache) {
+      return this.state.xAxisCache[groupKey];
+    }
     switch (groupKey) {
       case "minute":
-        return [...Array(60).keys()];
+        this.state.xAxisCache[groupKey] = [...Array(60).keys()];
+        break;
       case "hour":
-        return [...Array(60).keys()];
+        this.state.xAxisCache[groupKey] = [...Array(60).keys()];
+        break;
       case "day":
-        return [...Array(24).keys()];
+        this.state.xAxisCache[groupKey] = [...Array(24).keys()];
+        break;
       case "week":
-        return [...Array(7).keys()];
+        this.state.xAxisCache[groupKey] = [...Array(7).keys()];
+        break;
       case "month":
-        return [
+        this.state.xAxisCache[groupKey] = [
           ...Array(
             new Date(moment().year(), moment().month(), 0).getDate()
           ).keys()
         ];
+        break;
       case "year":
-        return [...Array(12).keys()];
+        this.state.xAxisCache[groupKey] = [...Array(12).keys()];
+        break;
       case "years":
-        return [...Array(5).keys()].map(v => moment().year() - v);
+        this.state.xAxisCache[groupKey] = [...Array(5).keys()].map(
+          v => moment().year() - v
+        );
+        break;
 
       default:
         break;
     }
+    return this.state.xAxisCache[groupKey];
   }
   groupData() {
-    let length = this.getAxis().length;
+    let groupKey = this.state.timeGroupKey;
+
+    let length = this.getxAxis().length;
     let data = {
       Productive: Array(length).fill(0),
       Neutral: Array(length).fill(0),
       Distracting: Array(length).fill(0)
     };
 
-    let timeFormat = this.getTimeFormat();
+    // let timeFormat = this.getTimeFormat();
     for (let v of this.props.stat) {
-      const idx = moment(v.start).format(timeFormat);
+      const idx = v.timeFormat[groupKey];
       // console.log("idx",idx)
       data[v.type][idx] += v.duration;
     }
@@ -160,33 +183,44 @@ class BarStatistic extends Component {
       },
       xAxis: {
         type: "category",
-        data: this.getAxis()
+        data: this.getxAxis()
       },
 
       color: ["#9DE949", "#23BBD8", "#FF6377"],
       series: [
+        // {
+        //   // For shadow
+        //   type: "bar",
+        //   itemStyle: {
+        //     normal: { color: "rgba(0,0,0,0.05)" }
+        //   },
+        //   barGap: "-100%",
+        //   barCategoryGap: "40%",
+        //   data: Array(this.getxAxis().length).fill(3600),
+        //   animation: false
+        // },
         {
           name: "Productive",
           type: "bar",
           stack: "总量",
-          label: {
-            normal: {
-              show: true,
-              position: "insideRight"
-            }
-          },
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     position: "insideRight"
+          //   }
+          // },
           data: this.state.data.Productive
         },
         {
           name: "Neutral",
           type: "bar",
           stack: "总量",
-          label: {
-            normal: {
-              show: true,
-              position: "insideRight"
-            }
-          },
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     position: "insideRight"
+          //   }
+          // },
 
           data: this.state.data.Neutral
         },
@@ -194,12 +228,12 @@ class BarStatistic extends Component {
           name: "Distracting",
           type: "bar",
           stack: "总量",
-          label: {
-            normal: {
-              show: true,
-              position: "insideRight"
-            }
-          },
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     position: "insideRight"
+          //   }
+          // },
           data: this.state.data.Distracting
         }
       ]
@@ -215,8 +249,8 @@ class BarStatistic extends Component {
           style={{ height: "200px", width: "100%" }}
           className="react_for_echarts"
         />
-        <div style={{ textAlign: "center"  }}>
-          <Select  
+        <div style={{ textAlign: "center" }}>
+          <Select
             labelInValue
             defaultValue={{ key: "day" }}
             style={{ width: 120 }}
