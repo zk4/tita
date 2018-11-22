@@ -2,9 +2,13 @@ import React, { Component } from "react";
 import "./App.css";
 import { List, Tabs, Card } from "antd";
 
+import Config from './layout/config/config'
 import BarStatistic from "./component/bar-statistic/bar-statistic";
 import CircleStatistic from "./component/circle-statistic/circle-statistic";
-  
+
+// import locale from "react-json-editor-ajrm/locale/en";
+// import Editor from './component/editor/editor'; // ES6
+
 const TabPane = Tabs.TabPane;
 const data = [
   {
@@ -20,18 +24,18 @@ const data = [
     title: "Title 4"
   }
 ];
-function callback(key) {
-  console.log(key);
-}
+
+ 
 
 const { app } = window.require("electron").remote;
 
 class App extends Component {
+
   render() {
-    const style = { height:"400px" };
+    const style = { height: "300px" };
     return (
-      <div className="App">
-        <Tabs defaultActiveKey="1" onChange={callback}>
+      <div>
+        <Tabs defaultActiveKey="1"  >
           <TabPane tab="Overview" key="1">
             <div style={{ padding: "5px 100px " }}>
               <List
@@ -40,9 +44,11 @@ class App extends Component {
                 renderItem={(item, idx) => (
                   <List.Item>
                     {idx < 3 ? (
-                      <Card  style={{style}} title={item.title}>Card content{idx}</Card>
+                      <Card style={{ style }} title={item.title}>
+                        Card content{idx}
+                      </Card>
                     ) : (
-                      <Card style={{style}}  title={item.title}>
+                      <Card style={{ style }} title={item.title}>
                         <CircleStatistic />
                       </Card>
                     )}
@@ -52,11 +58,11 @@ class App extends Component {
             </div>
             <BarStatistic />
           </TabPane>
-          <TabPane tab="Tab 2" key="2">
-            Content of Tab Pane 2
+          <TabPane tab="TimeLine" key="2">
+           
           </TabPane>
-          <TabPane tab="Tab 3" key="3">
-            Content of Tab Pane 3
+          <TabPane   tab="Config" key="3">
+          <Config></Config>
           </TabPane>
         </Tabs>
       </div>

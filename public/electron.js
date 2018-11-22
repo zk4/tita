@@ -13,13 +13,24 @@ require("update-electron-app")({
 });
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 680 });
+  mainWindow = new BrowserWindow({ width: 900, height: 780 });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
-  mainWindow.on("closed", () => (mainWindow = null));
+  mainWindow.on("closed", () => {
+    
+    mainWindow = null
+ 
+  });
+  mainWindow.on('before-quit', function (e) {
+    // Handle menu-item or keyboard shortcut quit here
+    if(!force_quit){
+        e.preventDefault();
+        mainWindow.hide();
+    }
+});
 }
 
 app.on("ready", createWindow);

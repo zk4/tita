@@ -1,5 +1,5 @@
 {
-  "name": "cra-electron",
+  "name": "tita",
   "description": "CRA + Electron sitting in a tree",
   "author": "Kitze",
   "version": "0.2.7",
@@ -16,6 +16,8 @@
     "node-osascript": "^2.1.0",
     "react": "16.4.0",
     "react-dom": "16.4.0",
+    "react-json-editor-ajrm": "^2.5.8",
+    "react-quill": "^1.3.2",
     "react-redux": "^5.1.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",

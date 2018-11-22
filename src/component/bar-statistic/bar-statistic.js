@@ -18,7 +18,6 @@ class BarStatistic extends Component {
         Distracting: []
       }
     };
-   
   }
   onSwitch(checked) {
     this.setState(
@@ -28,17 +27,15 @@ class BarStatistic extends Component {
       () => {
         if (checked) {
           this.componentDidMount();
-        }else{
+        } else {
           this.componentWillUnmount();
         }
       }
     );
   }
-  
+
   componentDidMount() {
-    
     if (this.state.bAutoRefresh) {
-     
       this.interval = setInterval(() => {
         this.groupData();
       }, config.intervalSec * 1000);
@@ -159,12 +156,13 @@ class BarStatistic extends Component {
       },
       yAxis: {
         type: "value",
-        max:'dataMax'
+        max: "dataMax"
       },
       xAxis: {
         type: "category",
         data: this.getAxis()
       },
+
       color: ["#9DE949", "#23BBD8", "#FF6377"],
       series: [
         {
@@ -217,24 +215,27 @@ class BarStatistic extends Component {
           style={{ height: "200px", width: "100%" }}
           className="react_for_echarts"
         />
-        <Select
-          labelInValue
-          defaultValue={{ key: "day" }}
-          style={{ width: 120 }}
-          onChange={e => this.handleChange(e)}
-        >
-          {/* <Option value="minute">minute</Option> */}
-          {/* <Option value="hour">hour</Option> */}
-          <Option value="day">day</Option>
-          <Option value="week">week</Option>
-          <Option value="month">month</Option>
-          <Option value="year">year</Option>
-        </Select>
-
-        <Switch
-          defaultChecked={this.state.bAutoRefresh}
-          onChange={e => this.onSwitch(e)}
-        />
+        <div style={{ textAlign: "center"  }}>
+          <Select  
+            labelInValue
+            defaultValue={{ key: "day" }}
+            style={{ width: 120 }}
+            onChange={e => this.handleChange(e)}
+          >
+            {/* <Option value="minute">minute</Option> */}
+            {/* <Option value="hour">hour</Option> */}
+            <Option value="day">day</Option>
+            <Option value="week">week</Option>
+            <Option value="month">month</Option>
+            <Option value="year">year</Option>
+          </Select>
+          <Switch
+            checkedChildren="刷新中"
+            unCheckedChildren="已关闭"
+            defaultChecked={this.state.bAutoRefresh}
+            onChange={e => this.onSwitch(e)}
+          />
+        </div>
       </div>
     );
   }
@@ -242,5 +243,5 @@ class BarStatistic extends Component {
 
 export default connect(
   state => state,
-  {   }
+  {}
 )(BarStatistic);
