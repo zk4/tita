@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
-import { config } from "../../config";
-import { Button, Switch, Select } from "antd";
+import   {getConfig}   from "../../util/configUtil";
+import {  Switch, Select } from "antd";
 import moment from "moment";
 const Option = Select.Option;
-
+let config =getConfig()
 class BarStatistic extends Component {
   constructor(props) {
     super(props);

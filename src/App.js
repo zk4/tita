@@ -6,6 +6,7 @@ import Config from './layout/config/config'
 import BarStatistic from "./component/bar-statistic/bar-statistic";
 import CircleStatistic from "./component/circle-statistic/circle-statistic";
 
+ 
 // import locale from "react-json-editor-ajrm/locale/en";
 // import Editor from './component/editor/editor'; // ES6
 

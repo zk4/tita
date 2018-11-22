@@ -1,9 +1,10 @@
 import moment from "moment";
-import { config } from "../config";
-let exec = window.require("child_process").exec;
+import  {getConfig}  from "./configUtil";
+
 let url = window.require("url");
 
 let osascript = window.require("node-osascript");
+let config = getConfig()
 
 async function getCurrentProcss() {
   let cmd =
@@ -17,15 +18,15 @@ async function getActiveUrl() {
   return await runAppleScript(cmd);
 }
 
-async function getWebName() {
-  let cmd = 'tell application "Google Chrome" to return  name  of front window';
-  return await runAppleScript(cmd);
-}
-async function getActiveNameAndUrl() {
-  let url = await getActiveUrl();
-  let name = await getWebName();
-  return { name, url };
-}
+// async function getWebName() {
+//   let cmd = 'tell application "Google Chrome" to return  name  of front window';
+//   return await runAppleScript(cmd);
+// }
+// async function getActiveNameAndUrl() {
+//   let url = await getActiveUrl();
+//   let name = await getWebName();
+//   return { name, url };
+// }
 
 function runAppleScript(script) {
   return new Promise((resolve, reject) => {
@@ -40,11 +41,11 @@ function runAppleScript(script) {
 }
 function getType(name) {
  
-  if (config.typeNameMaps.productive.indexOf(name) != -1) {
+  if (config.typeNameMaps.productive.indexOf(name) !== -1) {
     return "Productive";
   }
 
-  if (config.typeNameMaps.distracting.indexOf(name) != -1) {
+  if (config.typeNameMaps.distracting.indexOf(name) !== -1) {
     return "Distracting";
   }
   return "Neutral";
@@ -52,7 +53,7 @@ function getType(name) {
 function getCategory(name) {
   for (let key of Object.keys(config.categoryNameMaps)) {
   
-    if (config.categoryNameMaps[key].indexOf(name) != -1) {
+    if (config.categoryNameMaps[key].indexOf(name) !== -1) {
       return key;
     }
   }

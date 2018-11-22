@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import frFR from 'antd/lib/locale-provider/fr_FR';
+// import frFR from 'antd/lib/locale-provider/fr_FR';
 import 'moment/locale/fr';
 import 'antd/dist/antd.css'; 
 import {createStore,applyMiddleware,compose} from 'redux';

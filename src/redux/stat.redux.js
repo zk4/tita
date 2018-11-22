@@ -1,15 +1,11 @@
 import { rolling } from "../util/mac-api";
 import moment from "moment";
-import { notification } from "antd";
-import { config } from "../config";
-const storage = window.require("electron-json-storage");
-const defaultDataPath = storage.getDefaultDataPath();
+import { getConfig, getStat, saveStat } from "../util/configUtil";
 
-console.log("defaultDataPath", defaultDataPath);
+let staticData = getStat();
+let config = getConfig();
 
 const AUTO_ADD_STAT_EVENT = "AUTO_ADD_STAT_EVENT";
- 
- 
 
 export function stat(state, action) {
   switch (action.type) {
@@ -28,10 +24,12 @@ export function stat(state, action) {
         }
       }
 
-      return [...state, action.payload];
+      const s = [...state, action.payload];
+      saveStat(JSON.stringify(s));
+      return s;
     }
     default:
-      return [];
+      return staticData || [];
   }
 }
 

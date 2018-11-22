@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import JSONInput from "react-json-editor-ajrm";
-import { config } from "../../config";
+import {getConfig,saveConfig} from "../../util/configUtil";
 import { Tabs, Button } from "antd";
 const TabPane = Tabs.TabPane;
 
+const config  = getConfig();
 export default class Config extends Component {
   saveJson(e) {
-    console.log("json", e);
+    console.log("saveJson", e);
+    saveConfig(e.json)
   }
   render() {
     return (
