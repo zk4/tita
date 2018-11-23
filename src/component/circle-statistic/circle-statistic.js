@@ -1,7 +1,25 @@
 import React, { Component } from 'react'
 import ReactEcharts from 'echarts-for-react';
- 
-export default class CircleStatistic extends Component {
+import { connect } from "react-redux";
+
+  class CircleStatistic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          Productive: 0,
+          Neutral: 0,
+          Distracting: 0
+        };
+      }
+    componentWillReceiveProps(props) {
+        let event = props.stat;
+    
+        let type = props.stat.type;
+       
+        this.setState({
+          [type]: this.state[type]+event.duration
+        });
+      }
     getOption(){
  
         return   {
@@ -12,15 +30,15 @@ export default class CircleStatistic extends Component {
             legend: {
                 orient: 'vertical',
                 x: 'left',
-                data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
+                data:['Productive','Neutral','Distracting'],
                 show:false
 
             },
             series: [
                 {
-                    name:'访问来源',
+                    name:'',
                     type:'pie',
-                    radius: ['20%', '70%'],
+                    radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
                     label: {
                         normal: {
@@ -40,12 +58,13 @@ export default class CircleStatistic extends Component {
                             show: false
                         }
                     },
+                    color: ["#9DE949", "#23BBD8", "#FF6377"],
+
                     data:[
-                        {value:335, name:'直接访问'},
-                        {value:310, name:'邮件营销'},
-                        {value:234, name:'联盟广告'},
-                        {value:135, name:'视频广告'},
-                        {value:1548, name:'搜索引擎'}
+                        {value:this.state.Productive, name:'Productive'},
+                        {value:this.state.Neutral, name:'Neutral'},
+                        {value:this.state.Distracting, name:'Distracting'},
+                      
                     ]
                 }
             ]
@@ -64,3 +83,7 @@ export default class CircleStatistic extends Component {
     )
   }
 }
+export default connect(
+    state => state,
+    {}
+  )(CircleStatistic);

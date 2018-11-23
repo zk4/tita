@@ -14,26 +14,26 @@ export function stat(state, action) {
       return state;
     }
     case AUTO_ADD_STAT_EVENT: {
-      if (state.length > 0) {
-        let lastSlice = state[state.length - 1];
-        if (action.payload.name === lastSlice.name) {
-          //如果在同一个小时内,则加在一起，因为最小统计周期为一小时
-          if (
-            moment(lastSlice.start).format("YYYYMMDDhh") ===
-            moment().format("YYYYMMDDh")
-          ) {
-            state[state.length - 1].duration += config.intervalSec;
-            return state;
-          }
-        }
-      }
+      // if (state.length > 0) {
+      //   let lastSlice = state[state.length - 1];
+      //   if (action.payload.name === lastSlice.name) {
+      //     //如果在同一个小时内,则加在一起，因为最小统计周期为一小时
+      //     if (
+      //       moment(lastSlice.start).format("YYYYMMDDhh") ===
+      //       moment().format("YYYYMMDDh")
+      //     ) {
+      //       state[state.length - 1].duration += config.intervalSec;
+      //       return state;
+      //     }
+      //   }
+      // }
 
-      const s = [...state, action.payload];
-      saveStat(JSON.stringify(s));
-      return s;
+      // const s = action.payload;
+      // // saveStat(JSON.stringify(s));
+      return action.payload;
     }
     default:
-      return staticData || [];
+      return null ;
   }
 }
 export function needRefresh() {

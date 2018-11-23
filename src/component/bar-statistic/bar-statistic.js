@@ -1,93 +1,48 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
-import { getConfig } from "../../util/configUtil";
 import { Switch, Select } from "antd";
 import moment from "moment";
 const Option = Select.Option;
-let config = getConfig();
-let yAxisMax={
-  "day":3600,
-  "week":3600,
-  "month":3600,
-  "year":3600,
-}
+
 class BarStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
       timeGroupKey: "day",
-      bAutoRefresh: false,
+      bAutoRefresh: true,
       data: {
         Productive: [],
         Neutral: [],
         Distracting: []
       },
+
       xAxisCache: {}
     };
     this.groupData();
-
   }
+
   onSwitch(checked) {
-    this.setState(
-      {
-        bAutoRefresh: checked
-      },
-      () => {
-        if (checked) {
-          this.componentDidMount();
-        } else {
-          this.componentWillUnmount();
-        }
-      }
-    );
+    this.setState({
+      bAutoRefresh: checked
+    });
   }
 
-  componentDidMount() {
-    if (this.state.bAutoRefresh) {
-      this.interval = setInterval(() => {
-        this.groupData();
-      }, config.intervalSec * 1000);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.interval) clearInterval(this.interval);
-  }
   handleChange(v) {
     this.setState({
       timeGroupKey: v.key
     });
     this.groupData();
   }
-  // arrayInSpan(key, year, month) {
-  //   switch (key) {
-  //     case "minute":
-  //       return Array(60).fill(0);
-  //     case "hour":
-  //       return Array(60).fill(0);
-  //     case "day":
-  //       return Array(24).fill(0);
-  //     case "week":
-  //       return Array(7).fill(0);
-  //     case "month":
-  //       return Array(new Date(year, month, 0).getDate()).fill(0);
-  //     case "year":
-  //       return Array(12).fill(0);
-  //     case "years":
-  //       return Array(5).fill(0);
-  //     default:
-  //       break;
-  //   }
-  // }
+  componentWillReceiveProps(props) {
+    if (this.state.bAutoRefresh) {
+      this.groupData();
+    }
+  }
 
   getTimeFormat() {
     let groupKey = this.state.timeGroupKey;
     switch (groupKey) {
-      // case "minute":
-      //   return "s";
-      // case "hour":
-      //   return "m";
       case "day":
         return "H";
       case "week":
@@ -96,8 +51,6 @@ class BarStatistic extends Component {
         return "DD";
       case "year":
         return "M";
-      // case "years":
-      //   return "YYYY";
       default:
         break;
     }
@@ -136,30 +89,38 @@ class BarStatistic extends Component {
           v => moment().year() - v
         );
         break;
-
       default:
         break;
     }
     return this.state.xAxisCache[groupKey];
   }
+  componentDidMount() {
+    let length = this.getxAxis().length;
+    this.setState({
+      data: {
+        Productive: Array(length).fill(0),
+        Neutral: Array(length).fill(0),
+        Distracting: Array(length).fill(0)
+      }
+    });
+  }
+  
   groupData() {
     let groupKey = this.state.timeGroupKey;
-
-    let length = this.getxAxis().length;
     let data = {
-      Productive: Array(length).fill(0),
-      Neutral: Array(length).fill(0),
-      Distracting: Array(length).fill(0)
+      Productive: [...this.state.data.Productive],
+      Neutral: [...this.state.data.Neutral],
+      Distracting: [...this.state.data.Distracting]
     };
 
-    // let timeFormat = this.getTimeFormat();
-    for (let v of this.props.stat) {
-      const idx = v.timeFormat[groupKey];
-      // console.log("idx",idx)
-      data[v.type][idx] += v.duration;
-    }
+    let v = this.props.stat;
+    if (!v) return;
 
-    this.setState({ data: data });
+    // const idx = v.timeFormat[groupKey];
+    const idx = moment(v.start).format(this.getTimeFormat());
+    data[v.type][idx] += v.duration;
+
+    this.setState({ data });
   }
   getOption() {
     return {
@@ -205,24 +166,13 @@ class BarStatistic extends Component {
           name: "Productive",
           type: "bar",
           stack: "总量",
-          // label: {
-          //   normal: {
-          //     show: true,
-          //     position: "insideRight"
-          //   }
-          // },
+
           data: this.state.data.Productive
         },
         {
           name: "Neutral",
           type: "bar",
           stack: "总量",
-          // label: {
-          //   normal: {
-          //     show: true,
-          //     position: "insideRight"
-          //   }
-          // },
 
           data: this.state.data.Neutral
         },
@@ -230,12 +180,7 @@ class BarStatistic extends Component {
           name: "Distracting",
           type: "bar",
           stack: "总量",
-          // label: {
-          //   normal: {
-          //     show: true,
-          //     position: "insideRight"
-          //   }
-          // },
+
           data: this.state.data.Distracting
         }
       ]
@@ -258,8 +203,6 @@ class BarStatistic extends Component {
             style={{ width: 120 }}
             onChange={e => this.handleChange(e)}
           >
-            {/* <Option value="minute">minute</Option> */}
-            {/* <Option value="hour">hour</Option> */}
             <Option value="day">day</Option>
             <Option value="week">week</Option>
             <Option value="month">month</Option>

@@ -47,7 +47,7 @@ function getType(name) {
   if (config.typeNameMaps.distracting.indexOf(name) !== -1) {
     return "Distracting";
   }
-  
+
   return "Neutral";
 }
 function getCategory(name) {
@@ -64,16 +64,6 @@ export async function rolling() {
     name = await getActiveUrl();
     name = url.parse(name).hostname;
   }
-  /*
-  case "day":
-        return "H";
-      case "week":
-        return "d";
-      case "month":
-        return "DD";
-      case "year":
-        return "M";
-  */
   return {
     name,
     processName,
@@ -81,19 +71,19 @@ export async function rolling() {
     category: getCategory(name),
     type: getType(name),
     start: timeStamp.format(),
-    timeFormat: {
-      day: timeStamp.format("H"),
-      week: timeStamp.format("d"),
-      month: timeStamp.format("DD"),
-      year: timeStamp.format("M")
-    },
+    // timeFormat: {
+    //   day: timeStamp.format("H"),
+    //   week: timeStamp.format("d"),
+    //   month: timeStamp.format("DD"),
+    //   year: timeStamp.format("M")
+    // },
     duration: config.intervalSec
   };
 }
 
 // demo
-(async () => {
-  setInterval(async () => {
-    console.log(await rolling());
-  }, 2000);
-})();
+// (async () => {
+//   setInterval(async () => {
+//     console.log(await rolling());
+//   }, 2000);
+// })();
