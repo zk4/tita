@@ -2,7 +2,7 @@ import { rolling } from "../util/mac-api";
 import moment from "moment";
 import { getConfig, getStat, saveStat } from "../util/configUtil";
 
-let staticData = getStat();
+
 let config = getConfig();
 
 const AUTO_ADD_STAT_EVENT = "AUTO_ADD_STAT_EVENT";

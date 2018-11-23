@@ -22,7 +22,7 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-  mainWindow.on("close", function() {
+  mainWindow.on("minimize", function(e) {
     //   <---- Catch close event
 
     // The dialog box below will open, instead of your app closing.
@@ -30,7 +30,17 @@ function createWindow() {
     //   message: "Close button has been pressed!",
     //   buttons: ["OK"]
     // });
+    mainWindow.webContents.send("schemeCall", "minimize");
+  });
+  mainWindow.on("move", e => {
+    mainWindow.webContents.send("schemeCall", "move");
+  });
 
+  mainWindow.on("maximize", e => {
+    mainWindow.webContents.send("schemeCall", "maximize");
+  });
+  mainWindow.on("restore", e => {
+    mainWindow.webContents.send("schemeCall", "restore");
   });
   mainWindow.on("before-quit", function(e) {
     // Handle menu-item or keyboard shortcut quit here

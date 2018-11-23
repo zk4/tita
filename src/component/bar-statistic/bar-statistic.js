@@ -3,9 +3,12 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import { switchRefresh } from "../../redux/refresh.redux";
+import { switchRefresh,closeRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
+import store from '../../redux/store'
 const Option = Select.Option;
+const { ipcRenderer } = window.require("electron");
+
 
 class BarStatistic extends Component {
   constructor(props) {
@@ -19,7 +22,7 @@ class BarStatistic extends Component {
       },
       xAxisCache: {}
     };
-    this.handleChange("day")
+    this.handleChange("day");
   }
   initData() {
     let length = this.getxAxis().length;
@@ -33,6 +36,19 @@ class BarStatistic extends Component {
   }
   componentDidMount() {
     this.initData();
+    let that=this;
+    ipcRenderer.on("schemeCall", (evt, msg) => {
+
+      if (msg === "restore") {
+        console.log("that",that)
+        // 循环引用了。但方法没问题
+        // that.handleChange({key:that.state.timeGroupKey});
+      }
+      if (msg === "minimize") {
+        // store.dispatch(closeRefresh());
+      }
+      console.log(evt, msg);
+    });
   }
   async handleChange(v) {
     this.setState(
