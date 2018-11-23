@@ -3,6 +3,7 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
+import {switchRefresh} from "../../redux/refresh.redux"
 const Option = Select.Option;
 
 class BarStatistic extends Component {
@@ -10,7 +11,7 @@ class BarStatistic extends Component {
     super(props);
     this.state = {
       timeGroupKey: "day",
-      bAutoRefresh: true,
+      // bAutoRefresh: true,
       data: {
         Productive: [],
         Neutral: [],
@@ -22,11 +23,11 @@ class BarStatistic extends Component {
     this.groupData();
   }
 
-  onSwitch(checked) {
-    this.setState({
-      bAutoRefresh: checked
-    });
-  }
+  // onSwitch(checked) {
+  //   this.setState({
+  //     bAutoRefresh: checked
+  //   });
+  // }
 
   handleChange(v) {
     this.setState({
@@ -35,7 +36,8 @@ class BarStatistic extends Component {
     this.groupData();
   }
   componentWillReceiveProps(props) {
-    if (this.state.bAutoRefresh) {
+
+    if (props.refresh) {
       this.groupData();
     }
   }
@@ -211,8 +213,8 @@ class BarStatistic extends Component {
           <Switch
             checkedChildren="刷新中"
             unCheckedChildren="已关闭"
-            defaultChecked={this.state.bAutoRefresh}
-            onChange={e => this.onSwitch(e)}
+            defaultChecked={this.props.refresh}
+            onChange={e => this.props.switchRefresh()}
           />
         </div>
       </div>
@@ -222,5 +224,5 @@ class BarStatistic extends Component {
 
 export default connect(
   state => state,
-  {}
+  {switchRefresh}
 )(BarStatistic);

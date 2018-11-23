@@ -1,89 +1,87 @@
-import React, { Component } from 'react'
-import ReactEcharts from 'echarts-for-react';
+import React, { Component } from "react";
+import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 
-  class CircleStatistic extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          Productive: 0,
-          Neutral: 0,
-          Distracting: 0
-        };
-      }
-    componentWillReceiveProps(props) {
+class CircleStatistic extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Productive: 0,
+      Neutral: 0,
+      Distracting: 0
+    };
+  }
+  componentWillReceiveProps(props) {
+    if (props.refresh) {
+      if (props.stat) {
         let event = props.stat;
-    
         let type = props.stat.type;
-       
         this.setState({
-          [type]: this.state[type]+event.duration
+          [type]: this.state[type] + event.duration
         });
       }
-    getOption(){
- 
-        return   {
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
+    }
+  }
+  getOption() {
+    return {
+      tooltip: {
+        trigger: "item",
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+      },
+      legend: {
+        orient: "vertical",
+        x: "left",
+        data: ["Productive", "Neutral", "Distracting"],
+        show: false
+      },
+      series: [
+        {
+          name: "",
+          type: "pie",
+          radius: ["50%", "70%"],
+          avoidLabelOverlap: false,
+          label: {
+            normal: {
+              show: false,
+              position: "center"
             },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data:['Productive','Neutral','Distracting'],
-                show:false
+            emphasis: {
+              show: true,
+              textStyle: {
+                fontSize: "20",
+                fontWeight: "bold"
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          color: ["#9DE949", "#23BBD8", "#FF6377"],
 
-            },
-            series: [
-                {
-                    name:'',
-                    type:'pie',
-                    radius: ['50%', '70%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            show: true,
-                            textStyle: {
-                                fontSize: '20',
-                                fontWeight: 'bold'
-                            }
-                        }
-                    },
-                    labelLine: {
-                        normal: {
-                            show: false
-                        }
-                    },
-                    color: ["#9DE949", "#23BBD8", "#FF6377"],
-
-                    data:[
-                        {value:this.state.Productive, name:'Productive'},
-                        {value:this.state.Neutral, name:'Neutral'},
-                        {value:this.state.Distracting, name:'Distracting'},
-                      
-                    ]
-                }
-            ]
-        };
-      }
+          data: [
+            { value: this.state.Productive, name: "Productive" },
+            { value: this.state.Neutral, name: "Neutral" },
+            { value: this.state.Distracting, name: "Distracting" }
+          ]
+        }
+      ]
+    };
+  }
   render() {
     return (
       <div>
-            <ReactEcharts
-            option={this.getOption()}
-            style={{  width: '100%'}}
-            className='react_for_echarts' />
-         
+        <ReactEcharts
+          option={this.getOption()}
+          style={{ width: "100%" }}
+          className="react_for_echarts"
+        />
       </div>
-
-    )
+    );
   }
 }
 export default connect(
-    state => state,
-    {}
-  )(CircleStatistic);
+  state => state,
+  {}
+)(CircleStatistic);

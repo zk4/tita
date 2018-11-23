@@ -8,7 +8,7 @@ let config = getConfig();
 const AUTO_ADD_STAT_EVENT = "AUTO_ADD_STAT_EVENT";
 const NEED_REFRESH = "NEED_REFRESH";
 
-export function stat(state, action) {
+export function stat(state=null, action) {
   switch (action.type) {
     case NEED_REFRESH:{
       return state;
@@ -33,7 +33,7 @@ export function stat(state, action) {
       return action.payload;
     }
     default:
-      return null ;
+      return state ;
   }
 }
 export function needRefresh() {
