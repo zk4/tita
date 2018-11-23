@@ -20,17 +20,25 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
   mainWindow.on("closed", () => {
-    
-    mainWindow = null
- 
+    mainWindow = null;
   });
-  mainWindow.on('before-quit', function (e) {
+  mainWindow.on("close", function() {
+    //   <---- Catch close event
+
+    // The dialog box below will open, instead of your app closing.
+    // require("dialog").showMessageBox({
+    //   message: "Close button has been pressed!",
+    //   buttons: ["OK"]
+    // });
+
+  });
+  mainWindow.on("before-quit", function(e) {
     // Handle menu-item or keyboard shortcut quit here
-    if(!force_quit){
-        e.preventDefault();
-        mainWindow.hide();
+    if (!force_quit) {
+      e.preventDefault();
+      mainWindow.hide();
     }
-});
+  });
 }
 
 app.on("ready", createWindow);

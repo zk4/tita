@@ -17,7 +17,7 @@ class BarStatistic extends Component {
     super(props);
     this.state = {
       timeGroupKey: "day",
-      bAutoRefresh: true,
+      bAutoRefresh: false,
       data: {
         Productive: [],
         Neutral: [],
@@ -25,6 +25,8 @@ class BarStatistic extends Component {
       },
       xAxisCache: {}
     };
+    this.groupData();
+
   }
   onSwitch(checked) {
     this.setState(
@@ -188,17 +190,17 @@ class BarStatistic extends Component {
 
       color: ["#9DE949", "#23BBD8", "#FF6377"],
       series: [
-        // {
-        //   // For shadow
-        //   type: "bar",
-        //   itemStyle: {
-        //     normal: { color: "rgba(0,0,0,0.05)" }
-        //   },
-        //   barGap: "-100%",
-        //   barCategoryGap: "40%",
-        //   data: Array(this.getxAxis().length).fill(3600),
-        //   animation: false
-        // },
+        {
+          // For shadow
+          type: "bar",
+          itemStyle: {
+            normal: { color: "rgba(0,0,0,0.05)" }
+          },
+          barGap: "-100%",
+          barCategoryGap: "40%",
+          data: Array(this.getxAxis().length).fill(3600),
+          animation: false
+        },
         {
           name: "Productive",
           type: "bar",

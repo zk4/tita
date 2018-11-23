@@ -95,9 +95,9 @@ export async function rolling() {
 }
 
 // demo
-// (async () => {
-//   setInterval(async () => {
-//     console.log( await rolling());
-//   }, 2000);
+(async () => {
+  setInterval(async () => {
+    console.log( await rolling());
+  }, 2000);
 
-// })();
+})();

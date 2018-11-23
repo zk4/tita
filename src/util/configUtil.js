@@ -21,7 +21,7 @@ export function getConfig() {
 }
 
 export function saveConfig(content) {
-  // fs.writeFileSync(userDataFilePath, content);
+  // fs.writeFile(userDataFilePath, content);
 }
 
 export function getStat() {
@@ -36,5 +36,5 @@ export function getStat() {
 }
 
 export function saveStat(content) {
-  // fs.writeFileSync(statDataFilePath, content);
+  // fs.writeFile(statDataFilePath, content);
 }

@@ -22,6 +22,7 @@
     "react-redux": "^5.1.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "sqlite3": "^4.0.4",
     "update-electron-app": "^1.2.0"
   },
   "devDependencies": {

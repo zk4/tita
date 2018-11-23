@@ -6,9 +6,13 @@ let staticData = getStat();
 let config = getConfig();
 
 const AUTO_ADD_STAT_EVENT = "AUTO_ADD_STAT_EVENT";
+const NEED_REFRESH = "NEED_REFRESH";
 
 export function stat(state, action) {
   switch (action.type) {
+    case NEED_REFRESH:{
+      return state;
+    }
     case AUTO_ADD_STAT_EVENT: {
       if (state.length > 0) {
         let lastSlice = state[state.length - 1];
@@ -32,7 +36,9 @@ export function stat(state, action) {
       return staticData || [];
   }
 }
-
+export function needRefresh() {
+  return {type:NEED_REFRESH}
+}
 export function autoAddStatEvent(payload) {
   return dispatch => {
     (async () => {

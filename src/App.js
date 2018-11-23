@@ -31,9 +31,15 @@ const data = [
 const { app } = window.require("electron").remote;
 
 class App extends Component {
-
   render() {
     const style = { height: "300px" };
+    const headerTitle=[
+      "Productive", "Neutral", "Distracting",""
+    ]
+    const headerColors=[
+      "#9DE949", "#23BBD8", "#FF6377",
+    ]
+    
     return (
       <div>
         <Tabs defaultActiveKey="1"  >
@@ -45,11 +51,11 @@ class App extends Component {
                 renderItem={(item, idx) => (
                   <List.Item>
                     {idx < 3 ? (
-                      <Card style={{ style }} title={item.title}>
+                      <Card headStyle={{"background":headerColors[idx]}} style={{ style }} title={headerTitle[idx]}>
                         Card content{idx}
                       </Card>
                     ) : (
-                      <Card style={{ style }} title={item.title}>
+                      <Card style={{ style }} >
                         <CircleStatistic />
                       </Card>
                     )}
