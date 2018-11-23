@@ -26,11 +26,11 @@ export function saveConfig(content) {
 
 export function getStat() {
   let data = [];
-  try {
-    data = JSON.parse(fs.readFileSync(statDataFilePath, "utf8"));
-  } catch (e) {
-    console.log("no file");
-  }
+  // try {
+  //   data = JSON.parse(fs.readFileSync(statDataFilePath, "utf8"));
+  // } catch (e) {
+  //   console.log("no file");
+  // }
 
   return data;
 }

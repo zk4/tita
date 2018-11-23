@@ -1,10 +1,10 @@
 import moment from "moment";
-import  {getConfig}  from "./configUtil";
+import { getConfig } from "./configUtil";
 
 let url = window.require("url");
 
 let osascript = window.require("node-osascript");
-let config = getConfig()
+let config = getConfig();
 
 async function getCurrentProcss() {
   let cmd =
@@ -40,7 +40,6 @@ function runAppleScript(script) {
   });
 }
 function getType(name) {
- 
   if (config.typeNameMaps.productive.indexOf(name) !== -1) {
     return "Productive";
   }
@@ -48,14 +47,12 @@ function getType(name) {
   if (config.typeNameMaps.distracting.indexOf(name) !== -1) {
     return "Distracting";
   }
+  
   return "Neutral";
 }
 function getCategory(name) {
   for (let key of Object.keys(config.categoryNameMaps)) {
-  
-    if (config.categoryNameMaps[key].indexOf(name) !== -1) {
-      return key;
-    }
+    if (config.categoryNameMaps[key].indexOf(name) !== -1) return key;
   }
   return "uncategory";
 }
@@ -80,15 +77,15 @@ export async function rolling() {
   return {
     name,
     processName,
-    subTask   : [],
-    category  : getCategory(name),
-    type      : getType(name),
-    start     : timeStamp.format(),
+    subTask: [],
+    category: getCategory(name),
+    type: getType(name),
+    start: timeStamp.format(),
     timeFormat: {
-      day  : timeStamp.format("H"),
-      week : timeStamp.format("d"),
+      day: timeStamp.format("H"),
+      week: timeStamp.format("d"),
       month: timeStamp.format("DD"),
-      year : timeStamp.format("M"),
+      year: timeStamp.format("M")
     },
     duration: config.intervalSec
   };
@@ -97,7 +94,6 @@ export async function rolling() {
 // demo
 (async () => {
   setInterval(async () => {
-    console.log( await rolling());
+    console.log(await rolling());
   }, 2000);
-
 })();
