@@ -19,9 +19,21 @@ class BarStatistic extends Component {
       },
       xAxisCache: {}
     };
-    this.groupData();
+    this.handleChange("day")
   }
-
+  initData() {
+    let length = this.getxAxis().length;
+    this.setState({
+      data: {
+        Productive: Array(length).fill(0),
+        Neutral: Array(length).fill(0),
+        Distracting: Array(length).fill(0)
+      }
+    });
+  }
+  componentDidMount() {
+    this.initData();
+  }
   async handleChange(v) {
     this.setState(
       {
@@ -31,27 +43,13 @@ class BarStatistic extends Component {
         this.componentDidMount();
       }
     );
-
-    this.groupData();
     let rawData = await getStat();
-    console.log("rawdata", rawData);
-
-    let data = {
-      Productive: [...this.state.data.Productive],
-      Neutral: [...this.state.data.Neutral],
-      Distracting: [...this.state.data.Distracting]
-    };
-    
-    for (v of rawData) {
-      const idx = moment(v.start).format(this.getTimeFormat());
-      data[v.type][idx] += v.duration;
-    }
-    this.setState({ data });
+    this.groupData(rawData);
   }
 
   componentWillReceiveProps(props) {
     if (props.refresh) {
-      this.groupData();
+      this.groupData([props.stat]);
     }
   }
 
@@ -109,29 +107,18 @@ class BarStatistic extends Component {
     }
     return this.state.xAxisCache[groupKey];
   }
-  componentDidMount() {
-    let length = this.getxAxis().length;
-    this.setState({
-      data: {
-        Productive: Array(length).fill(0),
-        Neutral: Array(length).fill(0),
-        Distracting: Array(length).fill(0)
-      }
-    });
-  }
 
-  async groupData() {
+  async groupData(events) {
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
       Distracting: [...this.state.data.Distracting]
     };
-    let v = this.props.stat;
-    if (!v) return;
 
-    const idx = moment(v.start).format(this.getTimeFormat());
-    data[v.type][idx] += v.duration;
-
+    for (let event of events) {
+      const idx = moment(event.start).format(this.getTimeFormat());
+      data[event.type][idx] += event.duration;
+    }
     this.setState({ data });
   }
 
