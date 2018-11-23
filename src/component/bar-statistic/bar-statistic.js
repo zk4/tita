@@ -3,7 +3,8 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import {switchRefresh} from "../../redux/refresh.redux"
+import { switchRefresh } from "../../redux/refresh.redux";
+import { getStat } from "../../util/configUtil";
 const Option = Select.Option;
 
 class BarStatistic extends Component {
@@ -11,32 +12,44 @@ class BarStatistic extends Component {
     super(props);
     this.state = {
       timeGroupKey: "day",
-      // bAutoRefresh: true,
       data: {
         Productive: [],
         Neutral: [],
         Distracting: []
       },
-
       xAxisCache: {}
     };
     this.groupData();
   }
 
-  // onSwitch(checked) {
-  //   this.setState({
-  //     bAutoRefresh: checked
-  //   });
-  // }
+  async handleChange(v) {
+    this.setState(
+      {
+        timeGroupKey: v.key
+      },
+      () => {
+        this.componentDidMount();
+      }
+    );
 
-  handleChange(v) {
-    this.setState({
-      timeGroupKey: v.key
-    });
     this.groupData();
-  }
-  componentWillReceiveProps(props) {
+    let rawData = await getStat();
+    console.log("rawdata", rawData);
 
+    let data = {
+      Productive: [...this.state.data.Productive],
+      Neutral: [...this.state.data.Neutral],
+      Distracting: [...this.state.data.Distracting]
+    };
+    
+    for (v of rawData) {
+      const idx = moment(v.start).format(this.getTimeFormat());
+      data[v.type][idx] += v.duration;
+    }
+    this.setState({ data });
+  }
+
+  componentWillReceiveProps(props) {
     if (props.refresh) {
       this.groupData();
     }
@@ -106,24 +119,22 @@ class BarStatistic extends Component {
       }
     });
   }
-  
-  groupData() {
-    let groupKey = this.state.timeGroupKey;
+
+  async groupData() {
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
       Distracting: [...this.state.data.Distracting]
     };
-
     let v = this.props.stat;
     if (!v) return;
 
-    // const idx = v.timeFormat[groupKey];
     const idx = moment(v.start).format(this.getTimeFormat());
     data[v.type][idx] += v.duration;
 
     this.setState({ data });
   }
+
   getOption() {
     return {
       tooltip: {
@@ -224,5 +235,5 @@ class BarStatistic extends Component {
 
 export default connect(
   state => state,
-  {switchRefresh}
+  { switchRefresh }
 )(BarStatistic);

@@ -1,6 +1,6 @@
 import { sysConfig } from "../config/system-config";
 import db from "../dbConfig";
-import moment from 'moment';
+import moment from "moment";
 const storage = window.require("electron-json-storage");
 const fs = window.require("fs");
 const dp = storage.getDefaultDataPath();
@@ -8,7 +8,7 @@ if (!fs.existsSync(dp)) {
   fs.mkdirSync(dp);
 }
 const userDataFilePath = dp + "/user_config.json";
-const statDataFilePath = dp + "/stat.json";
+ 
 
 export function getConfig() {
   let userConfig = {};
@@ -27,16 +27,23 @@ export function saveConfig(content) {
 }
 
 export async function getStat() {
-  let data = [];
-  let from=moment("11/24/2018 02:00", "M/D/YYYY HH:mm").valueOf()
-  let to=moment("11/24/2018 02:03", "M/D/YYYY HH:mm").valueOf()
-  db.serialize(function() {
-
-    db.all(`SELECT  * FROM stat as s where  s.start>${from} and s.start<${to} `, function(err, row) {
-      console.log("getStat---",row);
+  //todo
+  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  return new Promise((resolve, reject) => {
+    db.serialize(function() {
+      db.all(
+        `SELECT  * FROM stat as s where  s.start>${from} and s.start<${to} `,
+        function(err, row) {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve(row);
+          }
+        }
+      );
     });
   });
-  return data;
 }
 
 export function saveStat(content) {
