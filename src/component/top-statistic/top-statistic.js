@@ -7,9 +7,9 @@ class TopStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Productive: [],
-      Neutral: [],
-      Distracting: []
+      Productive: [{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 }],
+      Neutral: [{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 }],
+      Distracting: [{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 },{ name: "", duration: 0 }]
     };
   }
   reOrder(type, idx) {
@@ -26,28 +26,26 @@ class TopStatistic extends Component {
   }
   componentWillReceiveProps(props) {
     if (props.refresh) {
-
-        let event = props.stat;
-        let type = props.stat.type;
-        let exist = false;
-        for (let i = this.state[type].length - 1; i >= 0; i--) {
-          let v = this.state[type][i];
-          if (v.name === event.name) {
-            v.duration += event.duration;
-            exist = true;
-            this.reOrder(type, i);
-            break;
-          }
+      let event = props.stat;
+      let type = props.stat.type;
+      let exist = false;
+      for (let i = this.state[type].length - 1; i >= 0; i--) {
+        let v = this.state[type][i];
+        if (v.name === event.name) {
+          v.duration += event.duration;
+          exist = true;
+          this.reOrder(type, i);
+          break;
         }
-        if (!exist) {
-          this.state[type].push(event);
-          this.reOrder(type, this.state[type].length - 1);
-        }
-        this.setState({
-          [type]: [...this.state[type]]
-        });
       }
-
+      if (!exist) {
+        this.state[type].push(event);
+        this.reOrder(type, this.state[type].length - 1);
+      }
+      this.setState({
+        [type]: [...this.state[type]]
+      });
+    }
   }
 
   render() {
@@ -84,10 +82,10 @@ class TopStatistic extends Component {
                     title={item.title}
                   >
                     <List
-                      dataSource={this.state[item.title].slice(0, 4)}
+                      dataSource={this.state[item.title].slice(0, 6)}
                       renderItem={i => (
-                        <List.Item key={i.name} extra={i.duration}>
-                          {i.name}
+                        <List.Item key={i.name}  >
+                          {i.name +" - "+i.duration}
                         </List.Item>
                       )}
                     />

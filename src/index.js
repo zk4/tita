@@ -18,3 +18,4 @@ ReactDOM.render( (
 
  
 store.dispatch(autoAddStatEvent())
+

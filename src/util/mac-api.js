@@ -59,7 +59,7 @@ function getCategory(name) {
 export async function rolling() {
   let processName = (await getCurrentProcss())[0];
   let name = processName;
-  let timeStamp = moment();
+  // let timeStamp = moment();
   if (processName === "Google Chrome") {
     name = await getActiveUrl();
     name = url.parse(name).hostname;
@@ -68,7 +68,7 @@ export async function rolling() {
     name,
     category: getCategory(name),
     type: getType(name),
-    start: timeStamp.format(),
+    start: Date.now(),
     duration: config.intervalSec
   };
 }

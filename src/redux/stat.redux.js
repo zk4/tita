@@ -25,9 +25,9 @@ export function stat(state=null, action) {
       //   }
       // }
 
-      // const s = action.payload;
-      // // saveStat(JSON.stringify(s));
-      return action.payload;
+      const s = action.payload;
+      saveStat(s);
+      return s;
     }
     default:
       return state ;
@@ -38,6 +38,7 @@ export function autoAddStatEvent(payload) {
   return dispatch => {
     (async () => {
       setInterval(async () => {
+
         let payload = await rolling();
         dispatch({ type: AUTO_ADD_STAT_EVENT, payload });
       }, config.intervalSec * 1000);

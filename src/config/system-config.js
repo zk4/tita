@@ -11,7 +11,7 @@ export var sysConfig = {
       learning: []
     },
     logKeepedDays: 3,
-    intervalSec: 10,
+    intervalSec: 100,
     heartBeat: 30, //must bigger than intervalSec
    
   };
