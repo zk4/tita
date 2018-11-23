@@ -13,13 +13,13 @@ class CircleStatistic extends Component {
   }
   componentWillReceiveProps(props) {
     if (props.refresh) {
-      if (props.stat) {
+
         let event = props.stat;
         let type = props.stat.type;
         this.setState({
           [type]: this.state[type] + event.duration
         });
-      }
+
     }
   }
   getOption() {

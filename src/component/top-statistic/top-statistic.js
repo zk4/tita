@@ -26,7 +26,7 @@ class TopStatistic extends Component {
   }
   componentWillReceiveProps(props) {
     if (props.refresh) {
-      if (props.stat) {
+
         let event = props.stat;
         let type = props.stat.type;
         let exist = false;
@@ -47,7 +47,7 @@ class TopStatistic extends Component {
           [type]: [...this.state[type]]
         });
       }
-    }
+
   }
 
   render() {
