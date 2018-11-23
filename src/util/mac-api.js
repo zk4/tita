@@ -66,17 +66,9 @@ export async function rolling() {
   }
   return {
     name,
-    processName,
-    subTask: [],
     category: getCategory(name),
     type: getType(name),
     start: timeStamp.format(),
-    // timeFormat: {
-    //   day: timeStamp.format("H"),
-    //   week: timeStamp.format("d"),
-    //   month: timeStamp.format("DD"),
-    //   year: timeStamp.format("M")
-    // },
     duration: config.intervalSec
   };
 }

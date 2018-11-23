@@ -1,6 +1,6 @@
 const SWITCH_REFRESH = "SWITCH_REFRESH";
 
-export function refresh(state = false, action) {
+export function refresh(state = true, action) {
   switch (action.type) {
     case SWITCH_REFRESH: {
       return !state;
