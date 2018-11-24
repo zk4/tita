@@ -35,7 +35,12 @@ function createWindow() {
   mainWindow.on("move", e => {
     mainWindow.webContents.send("ipc", "move");
   });
-
+  mainWindow.on("focus", e => {
+    mainWindow.webContents.send("ipc", "focus");
+  });
+  mainWindow.on("blur", e => {
+    mainWindow.webContents.send("ipc", "blur");
+  });
   mainWindow.on("maximize", e => {
     mainWindow.webContents.send("ipc", "maximize");
   });

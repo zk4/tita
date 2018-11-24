@@ -3,9 +3,14 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import { switchRefresh } from "../../redux/refresh.redux";
+import {
+  switchRefresh,
+  closeRefresh,
+  openRefresh
+} from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
 import { getMonthdays } from "../../util/timeUtil";
+import store from "../../redux/store";
 
 const Option = Select.Option;
 const { ipcRenderer } = window.require("electron");
@@ -32,11 +37,19 @@ class BarStatistic extends Component {
     this.initXY();
 
     ipcRenderer.on("ipc", (evt, msg) => {
-      if (msg === "restore") {
-        this.initXY();
+      // if (msg === "restore") {
+      //   this.initXY();
+      //   store.dispatch(switchRefresh());
+      // }
+      // if (msg === "minimize") {
+      //   store.dispatch(closeRefresh());
+      // }
+      if (msg === "blur" || msg === "minimize") {
+        store.dispatch(closeRefresh());
       }
-      if (msg === "minimize") {
-        // store.dispatch(closeRefresh());
+      if (msg === "focus") {
+        this.initXY();
+        store.dispatch(openRefresh());
       }
     });
   }
@@ -62,6 +75,7 @@ class BarStatistic extends Component {
   }
 
   componentWillReceiveProps(props) {
+    console.log(props);
     if (props.refresh) {
       this.updateY([props.stat]);
     }
@@ -224,9 +238,10 @@ class BarStatistic extends Component {
             <Option value="year">year</Option>
           </Select>
           <Switch
+            disabled
             checkedChildren="刷新中"
             unCheckedChildren="已关闭"
-            defaultChecked={this.props.refresh}
+            checked={this.props.refresh}
             onChange={e => this.props.switchRefresh()}
           />
         </div>
