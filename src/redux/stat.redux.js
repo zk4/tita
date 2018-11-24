@@ -1,6 +1,5 @@
 import { rolling } from "../util/mac-api";
-import moment from "moment";
-import { getConfig, getStat, saveStat } from "../util/configUtil";
+import { getConfig, saveStat } from "../util/configUtil";
 
 
 let config = getConfig();

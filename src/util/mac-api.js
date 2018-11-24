@@ -1,4 +1,4 @@
-import moment from "moment";
+
 import { getConfig } from "./configUtil";
 
 let url = window.require("url");

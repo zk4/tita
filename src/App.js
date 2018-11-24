@@ -7,7 +7,7 @@ import BarStatistic from "./component/bar-statistic/bar-statistic";
 import TopStatistic from "./component/top-statistic/top-statistic";
 
 const TabPane = Tabs.TabPane;
-const { app } = window.require("electron").remote;
+// const { app } = window.require("electron").remote;
 
 var robot = window.require("robotjs");
 

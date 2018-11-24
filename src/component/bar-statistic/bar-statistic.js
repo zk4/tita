@@ -3,12 +3,18 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import { switchRefresh, closeRefresh } from "../../redux/refresh.redux";
+import { switchRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
+import { getMonthdays } from "../../util/timeUtil";
 
 const Option = Select.Option;
-const { ipcRenderer } = window.require("electron");
-
+// const { ipcRenderer } = window.require("electron");
+const yMaxMaps = {
+  day: 3600,
+  week: 3600 * 24 * 7,
+  month: 3600 * 24 * getMonthdays(),
+  year: 3600 * 24 * 31 * 12
+};
 class BarStatistic extends Component {
   constructor(props) {
     super(props);
@@ -18,10 +24,10 @@ class BarStatistic extends Component {
         Productive: [],
         Neutral: [],
         Distracting: []
-      },
-      xAxisCache: {}
+      }
     };
-    this.onTimeSelect(this.state.timeGroupKey);
+    this.xAxisCache = {};
+    this.initData();
   }
   componentDidMount() {
     this.resetData();
@@ -37,13 +43,14 @@ class BarStatistic extends Component {
     //   }
     // });
   }
-
+  async initData() {
+    this.resetData();
+    this.updateData(await getStat());
+  }
   async onTimeSelect(v) {
-    this.setState({ timeGroupKey: v.key }, () => {
-      this.resetData();
+    this.setState({ timeGroupKey: v.key }, async () => {
+      this.initData();
     });
-    let rawData = await getStat();
-    this.updateData(rawData);
   }
 
   resetData() {
@@ -81,41 +88,37 @@ class BarStatistic extends Component {
 
   getxAxis() {
     let groupKey = this.state.timeGroupKey;
-    if (groupKey in this.state.xAxisCache) {
-      return this.state.xAxisCache[groupKey];
+    if (groupKey in this.xAxisCache) {
+      return this.xAxisCache[groupKey];
     }
     switch (groupKey) {
       case "minute":
-        this.state.xAxisCache[groupKey] = [...Array(60).keys()];
+        this.xAxisCache[groupKey] = [...Array(60).keys()];
         break;
       case "hour":
-        this.state.xAxisCache[groupKey] = [...Array(60).keys()];
+        this.xAxisCache[groupKey] = [...Array(60).keys()];
         break;
       case "day":
-        this.state.xAxisCache[groupKey] = [...Array(24).keys()];
+        this.xAxisCache[groupKey] = [...Array(24).keys()];
         break;
       case "week":
-        this.state.xAxisCache[groupKey] = [...Array(7).keys()];
+        this.xAxisCache[groupKey] = [...Array(7).keys()];
         break;
       case "month":
-        this.state.xAxisCache[groupKey] = [
-          ...Array(
-            new Date(moment().year(), moment().month(), 0).getDate()
-          ).keys()
-        ];
+        this.xAxisCache[groupKey] = [...Array(getMonthdays()).keys()];
         break;
       case "year":
-        this.state.xAxisCache[groupKey] = [...Array(12).keys()];
+        this.xAxisCache[groupKey] = [...Array(12).keys()];
         break;
       case "years":
-        this.state.xAxisCache[groupKey] = [...Array(5).keys()].map(
+        this.xAxisCache[groupKey] = [...Array(5).keys()].map(
           v => moment().year() - v
         );
         break;
       default:
         break;
     }
-    return this.state.xAxisCache[groupKey];
+    return this.xAxisCache[groupKey];
   }
 
   async updateData(events) {
@@ -172,7 +175,9 @@ class BarStatistic extends Component {
           },
           barGap: "-100%",
           barCategoryGap: "40%",
-          data: Array(this.getxAxis().length).fill(3600),
+          data: Array(this.getxAxis().length).fill(
+            yMaxMaps[this.state.timeGroupKey]
+          ),
           animation: false
         },
         {

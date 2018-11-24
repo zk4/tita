@@ -5,7 +5,7 @@ import { message } from "antd";
 
 const storage = window.require("electron-json-storage");
 const fs = window.require("fs");
-const dp =  storage.getDefaultDataPath();
+const dp = storage.getDefaultDataPath();
 if (!fs.existsSync(dp)) {
   fs.mkdirSync(dp);
 }
@@ -18,7 +18,6 @@ export function getDefaultResourcePath() {
 export function getConfig() {
   let userConfig = {};
   try {
-    console.log("userDataFilePath", userDataFilePath);
     userConfig = JSON.parse(fs.readFileSync(userDataFilePath, "utf8"));
   } catch (e) {
     console.log(e, "no file");
@@ -28,16 +27,12 @@ export function getConfig() {
 }
 
 export function saveConfig(content) {
-  fs.writeFile(userDataFilePath, content,(err)=>{
+  fs.writeFile(userDataFilePath, content, err => {
     if (!err) {
       message.info("save successful");
-
-    }else{
+    } else {
       message.info("save failed");
-
     }
-  
-  
   });
 }
 
@@ -83,3 +78,4 @@ export function saveStat(content) {
   }
   // db.close();
 }
+
