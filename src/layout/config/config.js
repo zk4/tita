@@ -34,6 +34,7 @@ export default class Config extends Component {
               defaultValue={this.state.value}
               onChange={e => this.onChange(e)}
             />
+           
             <Button type="primary" onClick={this.saveJson.bind(this)} block>
               Save
             </Button>
