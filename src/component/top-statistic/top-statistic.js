@@ -49,7 +49,7 @@ class TopStatistic extends Component {
   }
 
   render() {
-    const style = { height: "300px" };
+    const style = { height: "300px" ,margin:0};
     const data = [
       {
         title: "Productive",
