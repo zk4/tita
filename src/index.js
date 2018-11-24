@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import {Provider} from 'react-redux'
 
 import './index.css';
-import {autoAddStatEvent} from './redux/stat.redux'
+// import {autoAddStatEvent} from './redux/stat.redux'
 import store from './redux/store'
 ReactDOM.render( (
   <Provider store={store}>
@@ -17,5 +17,5 @@ ReactDOM.render( (
 
 
  
-store.dispatch(autoAddStatEvent())
+// store.dispatch(autoAddStatEvent())
 

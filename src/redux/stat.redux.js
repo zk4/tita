@@ -1,13 +1,12 @@
+import store from "./store";
 import { rolling } from "../util/mac-api";
 import { getConfig, saveStat } from "../util/configUtil";
-
 
 let config = getConfig();
 
 const AUTO_ADD_STAT_EVENT = "AUTO_ADD_STAT_EVENT";
 
-
-export function stat(state=null, action) {
+export function stat(state = null, action) {
   switch (action.type) {
     case AUTO_ADD_STAT_EVENT: {
       // if (state.length > 0) {
@@ -29,18 +28,31 @@ export function stat(state=null, action) {
       return s;
     }
     default:
-      return state ;
+      return state;
   }
 }
+setInterval(() => {
+ 
+  store.dispatch(async (dispatch, state) => {
+ 
+    if (!state().mouse) {
+      let payload = await rolling();
+      dispatch({
+        type: AUTO_ADD_STAT_EVENT,
+        payload
+      });
+    }
+  });
+}, config.intervalSec * 1000);
 
-export function autoAddStatEvent(payload) {
-  return dispatch => {
-    (async () => {
-      setInterval(async () => {
+// export function autoAddStatEvent(payload) {
+//   return dispatch => {
+//     (async () => {
+//       setInterval(async () => {
 
-        let payload = await rolling();
-        dispatch({ type: AUTO_ADD_STAT_EVENT, payload });
-      }, config.intervalSec * 1000);
-    })();
-  };
-}
+//         let payload = await rolling();
+//         dispatch({ type: AUTO_ADD_STAT_EVENT, payload });
+//       }, config.intervalSec * 1000);
+//     })();
+//   };
+// }
