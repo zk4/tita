@@ -8,7 +8,7 @@ import { getStat } from "../../util/configUtil";
 import { getMonthdays } from "../../util/timeUtil";
 
 const Option = Select.Option;
-// const { ipcRenderer } = window.require("electron");
+const { ipcRenderer } = window.require("electron");
 const yMaxMaps = {
   day: 3600,
   week: 3600 * 24 * 7,
@@ -27,33 +27,30 @@ class BarStatistic extends Component {
       }
     };
     this.xAxisCache = {};
-    this.initData();
   }
   componentDidMount() {
-    this.resetData();
+    this.initXY();
 
-    // ipcRenderer.on("ipc", (evt, msg) => {
-    //   if (msg === "restore") {
-    //     console.log("this", this);
-    //     // 循环引用了。但方法没问题
-    //     // that.onTimeSelect({key:that.state.timeGroupKey});
-    //   }
-    //   if (msg === "minimize") {
-    //     // store.dispatch(closeRefresh());
-    //   }
-    // });
+    ipcRenderer.on("ipc", (evt, msg) => {
+      if (msg === "restore") {
+        this.initXY();
+      }
+      if (msg === "minimize") {
+        // store.dispatch(closeRefresh());
+      }
+    });
   }
-  async initData() {
-    this.resetData();
-    this.updateData(await getStat());
+  async initXY() {
+    this.resetXaxis();
+    this.updateY(await getStat());
   }
   async onTimeSelect(v) {
     this.setState({ timeGroupKey: v.key }, async () => {
-      this.initData();
+      this.initXY();
     });
   }
 
-  resetData() {
+  resetXaxis() {
     let length = this.getxAxis().length;
     this.setState({
       data: {
@@ -66,7 +63,7 @@ class BarStatistic extends Component {
 
   componentWillReceiveProps(props) {
     if (props.refresh) {
-      this.updateData([props.stat]);
+      this.updateY([props.stat]);
     }
   }
 
@@ -121,7 +118,7 @@ class BarStatistic extends Component {
     return this.xAxisCache[groupKey];
   }
 
-  async updateData(events) {
+  async updateY(events) {
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
