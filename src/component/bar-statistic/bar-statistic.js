@@ -3,12 +3,11 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import { switchRefresh,closeRefresh } from "../../redux/refresh.redux";
+import { switchRefresh, closeRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
-import store from '../../redux/store'
+import store from "../../redux/store";
 const Option = Select.Option;
 const { ipcRenderer } = window.require("electron");
-
 
 class BarStatistic extends Component {
   constructor(props) {
@@ -36,11 +35,10 @@ class BarStatistic extends Component {
   }
   componentDidMount() {
     this.initData();
-    let that=this;
+    let that = this;
     ipcRenderer.on("schemeCall", (evt, msg) => {
-
       if (msg === "restore") {
-        console.log("that",that)
+        console.log("that", that);
         // 循环引用了。但方法没问题
         // that.handleChange({key:that.state.timeGroupKey});
       }
@@ -130,12 +128,15 @@ class BarStatistic extends Component {
       Neutral: [...this.state.data.Neutral],
       Distracting: [...this.state.data.Distracting]
     };
-
-    for (let event of events) {
-      const idx = moment(event.start).format(this.getTimeFormat());
-      data[event.type][idx] += event.duration;
+    if (events) {
+      for (let event of events) {
+        if (event) {
+          const idx = moment(event.start).format(this.getTimeFormat());
+          data[event.type][idx] += event.duration;
+        }
+      }
+      this.setState({ data });
     }
-    this.setState({ data });
   }
 
   getOption() {

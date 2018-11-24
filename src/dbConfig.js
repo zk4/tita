@@ -1,5 +1,8 @@
+const storage = window.require("electron-json-storage");
 var sqlite3 = window.require("sqlite3").verbose();
-var db = new sqlite3.Database("./sqlite00000.stat");
+const dp =  storage.getDefaultDataPath();
+console.log("dp()",dp)
+var db = new sqlite3.Database(dp+"/sqlite00000.stat");
 
 db.serialize(function() {
   db.run(`CREATE TABLE stat 

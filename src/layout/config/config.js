@@ -1,30 +1,42 @@
 import React, { Component } from "react";
-import JSONInput from "react-json-editor-ajrm";
-import {getConfig,saveConfig} from "../../util/configUtil";
-import { Tabs, Button } from "antd";
+import { getConfig, saveConfig } from "../../util/configUtil";
+import { Input, Tabs, Button } from "antd";
+const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
+const config = getConfig();
 
-const config  = getConfig();
 export default class Config extends Component {
-  saveJson(e) {
-    console.log("saveJson", e);
-    saveConfig(e.json)
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: JSON.stringify(config, null, 4)
+    };
   }
+  saveJson(e) {
+    saveConfig(this.state.value);
+  }
+
+  onChange(e) {
+    this.setState({
+      value: e.target.value
+    });
+  }
+
   render() {
     return (
       <div>
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="2">
           <TabPane className="center" tab="config" key="1" />
           <TabPane tab="Json (Advanced)" key="2">
-            <JSONInput
-              width="100%"
-              height="100%"
-              id="a_unique_id"
-              placeholder={config}
-              theme="light_mitsuketa_tribute"
-              onChange={e => this.saveJson(e)}
+            <TextArea
+              rows={4}
+              autosize
+              defaultValue={this.state.value}
+              onChange={e => this.onChange(e)}
             />
-            <Button onClick={e => {}} />
+            <Button type="primary" onClick={this.saveJson.bind(this)} block>
+              Save
+            </Button>
           </TabPane>
         </Tabs>
       </div>

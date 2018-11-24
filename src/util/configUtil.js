@@ -1,14 +1,19 @@
 import { sysConfig } from "../config/system-config";
 import db from "../dbConfig";
 import moment from "moment";
+import { message } from "antd";
+
 const storage = window.require("electron-json-storage");
 const fs = window.require("fs");
-const dp = storage.getDefaultDataPath();
+const dp =  storage.getDefaultDataPath();
 if (!fs.existsSync(dp)) {
   fs.mkdirSync(dp);
 }
 const userDataFilePath = dp + "/user_config.json";
- 
+
+export function getDefaultResourcePath() {
+  return storage.getDefaultDataPath();
+}
 
 export function getConfig() {
   let userConfig = {};
@@ -23,7 +28,17 @@ export function getConfig() {
 }
 
 export function saveConfig(content) {
-  fs.writeFile(userDataFilePath, content);
+  fs.writeFile(userDataFilePath, content,(err)=>{
+    if (!err) {
+      message.info("save successful");
+
+    }else{
+      message.info("save failed");
+
+    }
+  
+  
+  });
 }
 
 export async function getStat() {
@@ -48,23 +63,23 @@ export async function getStat() {
 
 export function saveStat(content) {
   // fs.writeFile(statDataFilePath, content);
+  if (content) {
+    db.serialize(function() {
+      var stmt = db.prepare("INSERT INTO stat VALUES (?,?,?,?,?)");
 
-  db.serialize(function() {
-    var stmt = db.prepare("INSERT INTO stat VALUES (?,?,?,?,?)");
+      stmt.run(
+        content.name,
+        content.category,
+        content.type,
+        content.duration,
+        content.start
+      );
+      stmt.finalize();
 
-    stmt.run(
-      content.name,
-      content.category,
-      content.type,
-      content.duration,
-      content.start
-    );
-    stmt.finalize();
-
-    // db.each("SELECT  * FROM stat as s ", function(err, row) {
-    //   console.log(row);
-    // });
-  });
-
+      // db.each("SELECT  * FROM stat as s ", function(err, row) {
+      //   console.log(row);
+      // });
+    });
+  }
   // db.close();
 }

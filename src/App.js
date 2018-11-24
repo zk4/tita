@@ -36,7 +36,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="3">
           <TabPane tab="Overview" key="1">
             <TopStatistic />
             <BarStatistic />
