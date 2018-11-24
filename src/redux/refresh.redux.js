@@ -2,7 +2,7 @@ const SWITCH_REFRESH = "SWITCH_REFRESH";
 const CLOSE_REFRESH = "CLOSE_REFRESH";
 const OPEN_REFRESH = "OPEN_REFRESH";
 
-export function refresh(state = true, action) {
+export function refresh(state = false, action) {
   switch (action.type) {
     case SWITCH_REFRESH: {
       return !state;

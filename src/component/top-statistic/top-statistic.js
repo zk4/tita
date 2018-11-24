@@ -2,41 +2,15 @@ import React, { Component } from "react";
 import { List, Card } from "antd";
 import CircleStatistic from "../circle-statistic/circle-statistic";
 import { connect } from "react-redux";
+import { getTop } from "../../util/configUtil";
 
 class TopStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Productive: [
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 }
-      ],
-      Neutral: [
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 }
-      ],
-      Distracting: [
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 },
-        { name: "", duration: 0 }
-      ]
+      Productive: [],
+      Neutral: [],
+      Distracting: []
     };
   }
   reOrder(type, idx) {
@@ -51,34 +25,55 @@ class TopStatistic extends Component {
       }
     }
   }
+  resetY() {
+    this.setState({
+      Productive: [],
+      Neutral: [],
+      Distracting: []
+    });
+  }
+  componentDidMount() {
+    this.initXY();
+  }
+  async initXY() {
+    this.resetY();
+    this.updateY(await getTop());
+  }
+  updateY(events) {
+    console.log(events);
+    for (let event of events) {
+      let type = event.type;
+      let exist = false;
+      for (let i = this.state[type].length - 1; i >= 0; i--) {
+        let v = this.state[type][i];
+        if (v.name === event.name) {
+          v.duration += event.duration;
+          exist = true;
+          this.reOrder(type, i);
+          break;
+        }
+      }
+      if (!exist) {
+        this.state[type].push(event);
+        this.reOrder(type, this.state[type].length - 1);
+      }
+      this.setState({
+        [type]: [...this.state[type]]
+      });
+    }
+  }
   componentWillReceiveProps(props) {
+    if (props.windowEvent === "focus") this.initXY();
+
     if (props.refresh) {
       if (props.stat) {
-        let event = props.stat;
-        let type = props.stat.type;
-        let exist = false;
-        for (let i = this.state[type].length - 1; i >= 0; i--) {
-          let v = this.state[type][i];
-          if (v.name === event.name) {
-            v.duration += event.duration;
-            exist = true;
-            this.reOrder(type, i);
-            break;
-          }
-        }
-        if (!exist) {
-          this.state[type].push(event);
-          this.reOrder(type, this.state[type].length - 1);
-        }
-        this.setState({
-          [type]: [...this.state[type]]
-        });
+        this.updateY([props.stat]);
       }
     }
   }
 
   render() {
-    const style = { height: "300px", margin: 0 };
+    const style = {  };
     const data = [
       {
         title: "Productive",
@@ -106,15 +101,16 @@ class TopStatistic extends Component {
               <List.Item>
                 {idx < 3 ? (
                   <Card
-                    headStyle={{ background: item.titleColor }}
+                    headStyle={{ color:"white", background: item.titleColor,textAlign:"center" }}
                     style={{ style }}
                     title={item.title}
                   >
                     <List
                       dataSource={this.state[item.title].slice(0, 6)}
                       renderItem={i => (
-                        <List.Item key={i.name}>
-                          {i.name + " - " + i.duration}
+                        <List.Item key={i.name} >
+                          {i.name}
+                          <div style={{float:"right"}}>{(i.duration/3600).toFixed(1) +"h"}</div>
                         </List.Item>
                       )}
                     />

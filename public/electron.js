@@ -12,6 +12,12 @@ require("update-electron-app")({
   updateInterval: "1 hour"
 });
 
+// var menubar = require('menubar')
+// var mb = menubar()
+// mb.on('ready', function ready () {
+//   console.log('app is ready')
+//   // your app code here
+// })
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 900, height: 780 });
   mainWindow.loadURL(
@@ -54,15 +60,34 @@ function createWindow() {
       mainWindow.hide();
     }
   });
+  // setMainMenu();
+  
 }
 
+function setMainMenu() {
+  const template = [
+    {
+      label: 'Filter',
+      submenu: [
+        {
+          label: 'Hello',
+          accelerator: 'Shift+CmdOrCtrl+H',
+          click() {
+              console.log('Oh, hi there!')
+          }
+        }
+      ]
+    }
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
 app.on("ready", createWindow);
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
+// app.on("window-all-closed", () => {
+//   if (process.platform !== "darwin") {
+//     app.quit();
+//   }
+// });
 
 app.on("activate", () => {
   if (mainWindow === null) {

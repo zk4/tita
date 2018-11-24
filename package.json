@@ -12,6 +12,7 @@
     "electron-is-dev": "0.3.0",
     "electron-json-storage": "^4.1.4",
     "electron-log": "^2.2.6",
+    "menubar": "^5.2.3",
     "moment": "^2.22.2",
     "node-osascript": "^2.1.0",
     "react": "16.4.0",

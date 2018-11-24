@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 
+import { getTypes } from "../../util/configUtil";
+
 class CircleStatistic extends Component {
   constructor(props) {
     super(props);
@@ -11,14 +13,34 @@ class CircleStatistic extends Component {
       Distracting: 0
     };
   }
+  componentDidMount() {
+    this.initXY();
+  }
+  resetY() {
+    this.setState({
+      Productive: 0,
+      Neutral: 0,
+      Distracting: 0
+    });
+  }
+  async initXY() {
+    this.resetY();
+    this.updateY(await getTypes());
+  }
+  updateY(events) {
+    for (let event of events){
+    let type = event.type;
+    this.setState({
+      [type]: this.state[type] + event.duration
+    });
+  }
+  }
   componentWillReceiveProps(props) {
+    if (props.windowEvent === "focus") this.initXY();
+
     if (props.refresh) {
       if (props.stat) {
-        let event = props.stat;
-        let type = props.stat.type;
-        this.setState({
-          [type]: this.state[type] + event.duration
-        });
+        this.updateY([props.stat]);
       }
     }
   }

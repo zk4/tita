@@ -16,7 +16,7 @@ export function mouse(state = null, action) {
 
 let mouseData = {
   position: { x: 0, y: 0 },
-  intervalSec: 10,
+  intervalSec: 600,
   maxCheckSec: 3600,
   nowSec: 0
 };

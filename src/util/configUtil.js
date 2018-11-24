@@ -36,6 +36,44 @@ export function saveConfig(content) {
   });
 }
 
+export async function getTypes() {
+  //todo
+  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  return new Promise((resolve, reject) => {
+    db.serialize(function() {
+      db.all(
+        `SELECT  type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by type`,
+        function(err, row) {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve(row);
+          }
+        }
+      );
+    });
+  });
+}
+export async function getTop() {
+  //todo
+  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  return new Promise((resolve, reject) => {
+    db.serialize(function() {
+      db.all(
+        `SELECT  name,type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by name`,
+        function(err, row) {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve(row);
+          }
+        }
+      );
+    });
+  });
+}
 export async function getStat() {
   //todo
   let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();

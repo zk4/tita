@@ -31,7 +31,7 @@ class BarStatistic extends Component {
     this.initXY();
   }
   async initXY() {
-    this.resetXaxis();
+    this.resetY();
     this.updateY(await getStat());
   }
   async onTimeSelect(v) {
@@ -40,7 +40,7 @@ class BarStatistic extends Component {
     });
   }
 
-  resetXaxis() {
+  resetY() {
     let length = this.getxAxis().length;
     this.setState({
       data: {
@@ -213,7 +213,7 @@ class BarStatistic extends Component {
             <Option value="year">year</Option>
           </Select>
           <Switch
-            disabled
+            
             checkedChildren="刷新中"
             unCheckedChildren="已关闭"
             checked={this.props.refresh}
