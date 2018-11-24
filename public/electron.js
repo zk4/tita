@@ -30,17 +30,17 @@ function createWindow() {
     //   message: "Close button has been pressed!",
     //   buttons: ["OK"]
     // });
-    mainWindow.webContents.send("schemeCall", "minimize");
+    mainWindow.webContents.send("ipc", "minimize");
   });
   mainWindow.on("move", e => {
-    mainWindow.webContents.send("schemeCall", "move");
+    mainWindow.webContents.send("ipc", "move");
   });
 
   mainWindow.on("maximize", e => {
-    mainWindow.webContents.send("schemeCall", "maximize");
+    mainWindow.webContents.send("ipc", "maximize");
   });
   mainWindow.on("restore", e => {
-    mainWindow.webContents.send("schemeCall", "restore");
+    mainWindow.webContents.send("ipc", "restore");
   });
   mainWindow.on("before-quit", function(e) {
     // Handle menu-item or keyboard shortcut quit here

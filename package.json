@@ -1,8 +1,8 @@
 {
   "name": "tita",
   "description": "CRA + Electron sitting in a tree",
-  "author": "Kitze",
-  "version": "0.2.7",
+  "author": "zk",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "antd": "^3.10.8",

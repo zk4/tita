@@ -52,7 +52,6 @@ class TopStatistic extends Component {
     }
   }
   componentWillReceiveProps(props) {
-    console.log("props", props);
     if (props.refresh) {
       if (props.stat) {
         let event = props.stat;

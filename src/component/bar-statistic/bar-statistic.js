@@ -5,7 +5,7 @@ import { Switch, Select } from "antd";
 import moment from "moment";
 import { switchRefresh, closeRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
-import store from "../../redux/store";
+
 const Option = Select.Option;
 const { ipcRenderer } = window.require("electron");
 
@@ -21,9 +21,32 @@ class BarStatistic extends Component {
       },
       xAxisCache: {}
     };
-    this.handleChange("day");
+    this.onTimeSelect(this.state.timeGroupKey);
   }
-  initData() {
+  componentDidMount() {
+    this.resetData();
+
+    // ipcRenderer.on("ipc", (evt, msg) => {
+    //   if (msg === "restore") {
+    //     console.log("this", this);
+    //     // 循环引用了。但方法没问题
+    //     // that.onTimeSelect({key:that.state.timeGroupKey});
+    //   }
+    //   if (msg === "minimize") {
+    //     // store.dispatch(closeRefresh());
+    //   }
+    // });
+  }
+
+  async onTimeSelect(v) {
+    this.setState({ timeGroupKey: v.key }, () => {
+      this.resetData();
+    });
+    let rawData = await getStat();
+    this.updateData(rawData);
+  }
+
+  resetData() {
     let length = this.getxAxis().length;
     this.setState({
       data: {
@@ -33,37 +56,10 @@ class BarStatistic extends Component {
       }
     });
   }
-  componentDidMount() {
-    this.initData();
-    let that = this;
-    ipcRenderer.on("schemeCall", (evt, msg) => {
-      if (msg === "restore") {
-        console.log("that", that);
-        // 循环引用了。但方法没问题
-        // that.handleChange({key:that.state.timeGroupKey});
-      }
-      if (msg === "minimize") {
-        // store.dispatch(closeRefresh());
-      }
-      console.log(evt, msg);
-    });
-  }
-  async handleChange(v) {
-    this.setState(
-      {
-        timeGroupKey: v.key
-      },
-      () => {
-        this.componentDidMount();
-      }
-    );
-    let rawData = await getStat();
-    this.groupData(rawData);
-  }
 
   componentWillReceiveProps(props) {
     if (props.refresh) {
-      this.groupData([props.stat]);
+      this.updateData([props.stat]);
     }
   }
 
@@ -122,7 +118,7 @@ class BarStatistic extends Component {
     return this.state.xAxisCache[groupKey];
   }
 
-  async groupData(events) {
+  async updateData(events) {
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
@@ -218,7 +214,7 @@ class BarStatistic extends Component {
             labelInValue
             defaultValue={{ key: "day" }}
             style={{ width: 120 }}
-            onChange={e => this.handleChange(e)}
+            onChange={e => this.onTimeSelect(e)}
           >
             <Option value="day">day</Option>
             <Option value="week">week</Option>
