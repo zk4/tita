@@ -22,10 +22,9 @@ export function switchRefresh(arg) {
 }
 
 export function closeRefresh(arg) {
-  return { type: CLOSE_REFRESH,payload:false };
+  return { type: CLOSE_REFRESH, payload: false };
 }
 
-
 export function openRefresh(arg) {
-  return { type: OPEN_REFRESH,payload:true };
+  return { type: OPEN_REFRESH, payload: true };
 }

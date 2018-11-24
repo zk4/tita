@@ -13,7 +13,6 @@ import { getMonthdays } from "../../util/timeUtil";
 import store from "../../redux/store";
 
 const Option = Select.Option;
-// const { ipcRenderer } = window.require("electron");
 const yMaxMaps = {
   day: 3600,
   week: 3600 * 24 * 7,
@@ -35,23 +34,6 @@ class BarStatistic extends Component {
   }
   componentDidMount() {
     this.initXY();
-
-    // ipcRenderer.on("ipc", (evt, msg) => {
-    //   // if (msg === "restore") {
-    //   //   this.initXY();
-    //   //   store.dispatch(switchRefresh());
-    //   // }
-    //   // if (msg === "minimize") {
-    //   //   store.dispatch(closeRefresh());
-    //   // }
-    //   if (msg === "blur" || msg === "minimize") {
-    //     store.dispatch(closeRefresh());
-    //   }
-    //   if (msg === "focus") {
-    //     this.initXY();
-    //     store.dispatch(openRefresh());
-    //   }
-    // });
   }
   async initXY() {
     this.resetXaxis();
