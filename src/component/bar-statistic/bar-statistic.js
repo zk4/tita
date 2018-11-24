@@ -3,14 +3,9 @@ import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
 import { Switch, Select } from "antd";
 import moment from "moment";
-import {
-  switchRefresh,
-  closeRefresh,
-  openRefresh
-} from "../../redux/refresh.redux";
+import { switchRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
 import { getMonthdays } from "../../util/timeUtil";
-import store from "../../redux/store";
 
 const Option = Select.Option;
 const yMaxMaps = {
@@ -58,14 +53,7 @@ class BarStatistic extends Component {
 
   componentWillReceiveProps(props) {
     if (props.refresh) this.updateY([props.stat]);
-
-    if (props.windowEvent === "blur" || props.windowEvent === "minimize")
-      store.dispatch(closeRefresh());
-
-    if (props.windowEvent === "focus") {
-      this.initXY();
-      store.dispatch(openRefresh());
-    }
+    if (props.windowEvent === "focus") this.initXY();
   }
 
   getTimeFormat() {
