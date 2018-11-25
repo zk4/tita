@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
-import { Switch, Select } from "antd";
+import { Select } from "antd";
 import moment from "moment";
 import { switchRefresh } from "../../redux/refresh.redux";
 import { getStat } from "../../util/configUtil";
@@ -126,6 +126,17 @@ class BarStatistic extends Component {
 
   getOption() {
     return {
+      toolbox: {
+        show : true,
+        feature : {
+            // mark : {show: true},
+            // dataView : {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            // restore : {show: true},
+            // saveAsImage : {show: true}
+        }
+    },
+    
       tooltip: {
         trigger: "axis",
         axisPointer: {
@@ -190,7 +201,6 @@ class BarStatistic extends Component {
       ]
     };
   }
-
   render() {
     return (
       <div>
@@ -212,13 +222,13 @@ class BarStatistic extends Component {
             <Option value="month">month</Option>
             <Option value="year">year</Option>
           </Select>
-          <Switch
+          {/* <Switch
             
             checkedChildren="刷新中"
             unCheckedChildren="已关闭"
             checked={this.props.refresh}
             onChange={e => this.props.switchRefresh()}
-          />
+          /> */}
         </div>
       </div>
     );

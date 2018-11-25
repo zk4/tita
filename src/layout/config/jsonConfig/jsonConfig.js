@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { getConfig, saveConfig } from "../../util/configUtil";
+import { getConfig, saveConfig } from "../../../util/configUtil";
 import { Input, Tabs, Button } from "antd";
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
 const config = getConfig();
 
-export default class Config extends Component {
+export default class JsonConfig extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +26,9 @@ export default class Config extends Component {
     return (
       <div>
         <Tabs defaultActiveKey="2">
-          <TabPane className="center" tab="config" key="1" />
+          <TabPane className="center" tab="config" key="1" >
+          
+          </TabPane>
           <TabPane tab="Json (Advanced)" key="2">
             <TextArea
               rows={4}

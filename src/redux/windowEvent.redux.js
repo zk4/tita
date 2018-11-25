@@ -1,5 +1,5 @@
 import store from "./store";
-import { closeRefresh, openRefresh } from "./refresh.redux";
+// import { closeRefresh, openRefresh } from "./refresh.redux";
 const { ipcRenderer } = window.require("electron");
 const WINDOW_EVENT = "WINDOW_EVENT";
 

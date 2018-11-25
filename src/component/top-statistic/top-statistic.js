@@ -41,6 +41,7 @@ class TopStatistic extends Component {
   }
   updateY(events) {
     console.log(events);
+
     for (let event of events) {
       let type = event.type;
       let exist = false;
@@ -73,7 +74,7 @@ class TopStatistic extends Component {
   }
 
   render() {
-    const style = {  };
+    const style = {};
     const data = [
       {
         title: "Productive",
@@ -101,16 +102,24 @@ class TopStatistic extends Component {
               <List.Item>
                 {idx < 3 ? (
                   <Card
-                    headStyle={{ color:"white", background: item.titleColor,textAlign:"center" }}
+                    headStyle={{
+                      color: "white",
+                      background: item.titleColor,
+                      textAlign: "center"
+                    }}
                     style={{ style }}
                     title={item.title}
                   >
                     <List
                       dataSource={this.state[item.title].slice(0, 6)}
                       renderItem={i => (
-                        <List.Item key={i.name} >
-                          {i.name}
-                          <div style={{float:"right"}}>{(i.duration/3600).toFixed(1) +"h"}</div>
+                        <List.Item key={i.name}>
+                          <span>{i.name}</span>
+                          <span style={{ float: "right" }}>
+                            {
+                              (i.duration / 3600).toFixed(2) + "h"
+                              }
+                          </span>
                         </List.Item>
                       )}
                     />

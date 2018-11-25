@@ -1,5 +1,5 @@
 import { sysConfig } from "../config/system-config";
-import db from "../dbConfig";
+import db from "../config/dbConfig";
 import moment from "moment";
 import { message } from "antd";
 
@@ -38,8 +38,8 @@ export function saveConfig(content) {
 
 export async function getTypes() {
   //todo
-  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
@@ -57,8 +57,8 @@ export async function getTypes() {
 }
 export async function getTop() {
   //todo
-  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
@@ -76,8 +76,8 @@ export async function getTop() {
 }
 export async function getStat() {
   //todo
-  let from = moment("11/24/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(

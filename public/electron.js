@@ -18,8 +18,16 @@ require("update-electron-app")({
 //   console.log('app is ready')
 //   // your app code here
 // })
+let SIZE_SCALE=7.5;
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 780 });
+  mainWindow = new BrowserWindow({
+    width: 160*SIZE_SCALE,
+    height: 100*SIZE_SCALE,
+    // titleBarStyle: "hidden",
+    minWidth: 160*SIZE_SCALE,
+    minHeight: 100*SIZE_SCALE,
+    icon: path.join(__dirname, "../assets/icons/png/64x64.png")
+  });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
@@ -61,19 +69,18 @@ function createWindow() {
     }
   });
   // setMainMenu();
-  
 }
 
 function setMainMenu() {
   const template = [
     {
-      label: 'Filter',
+      label: "Filter",
       submenu: [
         {
-          label: 'Hello',
-          accelerator: 'Shift+CmdOrCtrl+H',
+          label: "Hello",
+          accelerator: "Shift+CmdOrCtrl+H",
           click() {
-              console.log('Oh, hi there!')
+            console.log("Oh, hi there!");
           }
         }
       ]

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { Tabs } from "antd";
 
-import Config from "./layout/config/config";
+import JsonConfig from "./layout/config/jsonConfig/jsonConfig";
 import Overview from "./layout/overview/overview";
 const TabPane = Tabs.TabPane;
 // const { app } = window.require("electron").remote;
@@ -17,7 +17,7 @@ class App extends Component {
           </TabPane>
           <TabPane tab="TimeLine" key="2" />
           <TabPane tab="Config" key="3">
-            <Config />
+            <JsonConfig />
           </TabPane>
         </Tabs>
       </div>

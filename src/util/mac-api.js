@@ -18,10 +18,10 @@ async function getActiveUrl() {
   return await runAppleScript(cmd);
 }
 
-// async function getWebName() {
-//   let cmd = 'tell application "Google Chrome" to return  name  of front window';
-//   return await runAppleScript(cmd);
-// }
+async function getWebName() {
+  let cmd = 'tell application "Google Chrome" to return  name  of front window';
+  return await runAppleScript(cmd);
+}
 // async function getActiveNameAndUrl() {
 //   let url = await getActiveUrl();
 //   let name = await getWebName();
@@ -61,8 +61,8 @@ export async function rolling() {
   let name = processName;
   // let timeStamp = moment();
   if (processName === "Google Chrome") {
-    name = await getActiveUrl();
-    name = url.parse(name).hostname;
+    name = await getWebName();
+    // name = url.parse(name).hostname;
   }
   return {
     name,
