@@ -36,10 +36,12 @@ export function saveConfig(content) {
   });
 }
 
-export async function getTypes() {
-  //todo
-  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
+export async function getTypes(key='day') {
+   //todo
+   if(key==='week')
+   key='isoWeek'
+  let from =  moment().startOf(key).valueOf();
+  let to =  moment().endOf(key).valueOf();
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
@@ -55,11 +57,13 @@ export async function getTypes() {
     });
   });
 }
-export async function getTop() {
-  //todo
-  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  return new Promise((resolve, reject) => {
+export async function getTop(key='day') {
+ //todo
+ if(key==='week')
+ key='isoWeek' 
+  let from =  moment().startOf(key).valueOf();
+  let to =  moment().endOf(key).valueOf();
+return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
         `SELECT  name,type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by name`,
@@ -74,11 +78,15 @@ export async function getTop() {
     });
   });
 }
-export async function getStat() {
+export async function getStat(key='day') {
   //todo
-  let from = moment("11/25/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  let to = moment("11/26/2018 00:00", "M/D/YYYY HH:mm").valueOf();
-  return new Promise((resolve, reject) => {
+  if(key==='week')
+    key='isoWeek'
+
+ console.log("key",key,moment().startOf(key).format())
+let from =  moment().startOf(key).valueOf();
+let to =  moment().endOf(key).valueOf();
+ return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
         `SELECT  * FROM stat as s where  s.start>${from} and s.start<${to} `,

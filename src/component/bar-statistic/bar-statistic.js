@@ -32,7 +32,7 @@ class BarStatistic extends Component {
   }
   async initXY() {
     this.resetY();
-    this.updateY(await getStat());
+    this.updateY(await getStat(this.state.timeGroupKey));
   }
   async onTimeSelect(v) {
     this.setState({ timeGroupKey: v.key }, async () => {
@@ -107,7 +107,7 @@ class BarStatistic extends Component {
     return this.xAxisCache[groupKey];
   }
 
-  async updateY(events) {
+  updateY(events) {
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
@@ -223,6 +223,8 @@ class BarStatistic extends Component {
             <Option value="month">month</Option>
             <Option value="year">year</Option>
           </Select>
+
+          
           {/* <Switch
             
             checkedChildren="刷新中"

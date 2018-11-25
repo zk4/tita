@@ -16,10 +16,11 @@ export function mouse(state = null, action) {
 
 let mouseData = {
   position: { x: 0, y: 0 },
-  intervalSec: 600,
-  maxCheckSec: 3600,
+  intervalSec: 5,
+  maxCheckSec: 30,
   nowSec: 0
 };
+
 setInterval(() => {
   var mouse = robot.getMousePos();
   // console.log("Mouse is at x:" + mouse.x + " y:" + mouse.y);
