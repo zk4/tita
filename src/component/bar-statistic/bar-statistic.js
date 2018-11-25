@@ -10,9 +10,9 @@ import { getMonthdays } from "../../util/timeUtil";
 const Option = Select.Option;
 const yMaxMaps = {
   day: 3600,
-  week: 3600 * 24 * 7,
-  month: 3600 * 24 * getMonthdays(),
-  year: 3600 * 24 * 31 * 12
+  week: 3600 * 24,
+  month: 3600 * 24,
+  year: 3600 * 24 * 31 
 };
 class BarStatistic extends Component {
   constructor(props) {
@@ -210,6 +210,7 @@ class BarStatistic extends Component {
           style={{ height: "200px", width: "100%" }}
           className="react_for_echarts"
         />
+        <br></br>
         <div style={{ textAlign: "center" }}>
           <Select
             labelInValue

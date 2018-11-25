@@ -61,8 +61,8 @@ export async function rolling() {
   let name = processName;
   // let timeStamp = moment();
   if (processName === "Google Chrome") {
-    name = await getWebName();
-    // name = url.parse(name).hostname;
+    name = await getActiveUrl();
+    name = url.parse(name).hostname;
   }
   return {
     name,

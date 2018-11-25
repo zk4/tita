@@ -60,7 +60,7 @@ class CircleStatistic extends Component {
         {
           name: "",
           type: "pie",
-          radius: ["60%", "100%"],
+          radius: ["50%", "90%"],
           avoidLabelOverlap: false,
           label: {
             normal: {
