@@ -40,8 +40,6 @@ class TopStatistic extends Component {
     this.updateY(await getTop());
   }
   updateY(events) {
-    console.log(events);
-
     for (let event of events) {
       let type = event.type;
       let exist = false;
@@ -116,9 +114,7 @@ class TopStatistic extends Component {
                         <List.Item key={i.name}>
                           <span>{i.name}</span>
                           <span style={{ float: "right" }}>
-                            {
-                              (i.duration / 3600).toFixed(2) + "h"
-                              }
+                            {(i.duration / 3600).toFixed(2) + "h"}
                           </span>
                         </List.Item>
                       )}

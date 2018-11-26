@@ -59,13 +59,16 @@ function getTag(name) {
 export async function rolling() {
   let processName = (await getCurrentProcss())[0];
   let name = processName;
+  let target="";
   // let timeStamp = moment();
   if (processName === "Google Chrome") {
     name = await getActiveUrl();
     name = url.parse(name).hostname;
+    target =await getWebName();
   }
   return {
     name,
+    target:target,
     tag: getTag(name),
     type: getType(name),
     start: Date.now(),

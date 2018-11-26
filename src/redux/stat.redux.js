@@ -1,6 +1,6 @@
 import store from "./store";
 import { rolling } from "../util/mac-api";
-import { getConfig, saveStat } from "../util/configUtil";
+import { getConfig, saveEvent } from "../util/configUtil";
 
 let config = getConfig();
 
@@ -24,7 +24,7 @@ export function stat(state = null, action) {
       // }
 
       const s = action.payload;
-      saveStat(s);
+      saveEvent(s);
       return s;
     }
     default:

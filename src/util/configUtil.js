@@ -48,7 +48,7 @@ export async function getTypes(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by type`,
+        `SELECT  type,sum(duration) as duration FROM  event  where  start>${from} and start<${to} group by type`,
         function(err, row) {
           if (err) {
             return reject(err);
@@ -72,7 +72,7 @@ export async function getTop(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  name,type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by name`,
+        `SELECT  name,type,sum(duration) as duration FROM  event  where  start>${from} and start<${to} group by name`,
         function(err, row) {
           if (err) {
             return reject(err);
@@ -96,7 +96,7 @@ export async function getStat(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  * FROM stat as s where  s.start>${from} and s.start<${to} `,
+        `SELECT  * FROM event as s where  s.start>${from} and s.start<${to} `,
         function(err, row) {
           if (err) {
             return reject(err);
@@ -109,25 +109,48 @@ export async function getStat(key = "day") {
   });
 }
 
-export function saveStat(content) {
+let lastContnet = null;
+let lastID = null;
+export function saveEvent(content) {
   // fs.writeFile(statDataFilePath, content);
   if (content) {
-    db.serialize(function() {
-      var stmt = db.prepare("INSERT INTO stat VALUES (?,?,?,?,?)");
+    if (lastContnet) {
+   
+      if (
+        content.name === lastContnet.name &&
+        content.target === lastContnet.target &&
+        moment(content.start).get("hours") ===
+          moment(lastContnet.start).get("hours")
+      ) {
+        lastContnet.duration += content.duration;
+        lastContnet.start = content.start;
+        console.log("same",lastID);
+        db.run(
+          `UPDATE "main"."event" SET "duration" = ${
+            lastContnet.duration
+          } WHERE rowid = ${lastID}`
+        );
 
-      stmt.run(
-        content.name,
-        content.tag,
-        content.type,
-        content.duration,
-        content.start
-      );
-      stmt.finalize();
-
-      // db.each("SELECT  * FROM stat as s ", function(err, row) {
-      //   console.log(row);
-      // });
-    });
+        return;
+      }
+    }
+    console.log("hit");
+    let sql = "INSERT INTO event VALUES (?,?,?,?,?,?)";
+    var stmt = db.prepare(sql);
+    stmt.run(
+      content.name,
+      content.tag,
+      content.type,
+      content.duration,
+      content.start,
+      content.target,
+      (s, err) => {
+        lastID = stmt.lastID;
+      }
+    );
+    stmt.finalize();
+    lastContnet = content;
+  
   }
   // db.close();
 }

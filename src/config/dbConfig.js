@@ -6,10 +6,11 @@ var db = new sqlite3.Database(dp + "/sqlite00000.stat");
 
 db.serialize(function() {
   try {
-    db.run(`CREATE TABLE stat 
+    db.run(`CREATE TABLE event 
                 (name TEXT,
                  tag TEXT,
                  type TEXT,
+                 target TEXT,
                  duration INT,
                  start DATETIME)`);
   } catch (e) {
