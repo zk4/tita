@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Drawer, Button } from "antd";
-
+import Container from "../../component/dragable/Container"
 export default class Todo extends Component {
   state = { visible: false, childrenDrawer: false };
 
@@ -31,6 +31,7 @@ export default class Todo extends Component {
   render() {
     return (
       <div>
+
         <Button type="primary" onClick={this.showDrawer}>
           Open drawer
         </Button>
@@ -79,6 +80,7 @@ export default class Todo extends Component {
             </Button>
           </div>
         </Drawer>
+        <Container></Container>
       </div>
     );
   }
