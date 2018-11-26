@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { List, Card } from "antd";
 import CircleStatistic from "../circle-statistic/circle-statistic";
 import { connect } from "react-redux";
-import { getTop } from "../../util/configUtil";
+import { getTopData } from "../../util/configUtil";
 
 class TopStatistic extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class TopStatistic extends Component {
   }
   async initXY() {
     this.resetY();
-    this.updateY(await getTop());
+    this.updateY(await getTopData());
   }
   updateY(events) {
     for (let event of events) {

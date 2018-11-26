@@ -7,14 +7,23 @@ var db = new sqlite3.Database(dp + "/sqlite00000.stat");
 db.serialize(function() {
   try {
     db.run(`CREATE TABLE event 
-                (name TEXT,
-                 tag TEXT,
-                 type TEXT,
-                 target TEXT,
-                 duration INT,
-                 start DATETIME)`);
+                (name TEXT NOT NULL,
+                 target TEXT ,
+                 duration INT NOT NULL,
+                 start DATETIME NOT NULL )`);
+    db.run(`CREATE TABLE "type" (
+                  "type_name" TEXT NOT NULL,
+                  "event_name" TEXT NOT NULL,
+                  PRIMARY KEY ("type_name", "event_name")
+                )`);
+
+    db.run(`CREATE TABLE "tag" (
+                  "tag_name" TEXT NOT NULL,
+                  "event_name" TEXT NOT NULL,
+                  PRIMARY KEY ("tag_name", "event_name")
+                )`);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 });
 

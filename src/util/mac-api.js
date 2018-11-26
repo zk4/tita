@@ -1,5 +1,5 @@
 
-import { getConfig } from "./configUtil";
+import { getConfig,getType,getTag } from "./configUtil";
 
 let url = window.require("url");
 
@@ -39,23 +39,47 @@ function runAppleScript(script) {
     });
   });
 }
-function getType(name) {
-  if (config.typeNameMaps.productive.indexOf(name) !== -1) {
-    return "Productive";
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+let finalTypes={}
+let finalTags={}
+
+async function getTypeByName(name) {
+  if(isEmpty(finalTypes)){
+    let types=await getType() 
+    types.forEach(v=>{
+       if(finalTypes[v.type_name]===undefined){
+         finalTypes[v.type_name]=[]
+       }
+       finalTypes[v.type_name].push(v.event_name)
+     })   
   }
 
-  if (config.typeNameMaps.distracting.indexOf(name) !== -1) {
-    return "Distracting";
+  for (let key of Object.keys(finalTypes)) {
+    if (finalTypes[key].indexOf(name) !== -1) return key;
   }
 
   return "Neutral";
 }
-function getTag(name) {
-  for (let key of Object.keys(config.tagNameMaps)) {
-    if (config.tagNameMaps[key].indexOf(name) !== -1) return key;
+async function getTagByName(name) {
+  if(isEmpty(finalTags)){
+    let tags=await getTag() 
+    tags.forEach(v=>{
+       if(finalTags[v.tag_name]===undefined){
+         finalTags[v.tag_name]=[]
+       }
+       finalTags[v.tag_name].push(v.event_name)
+     })   
+  }
+
+  for (let key of Object.keys(finalTags)) {
+    if (finalTags[key].indexOf(name) !== -1) return key;
   }
   return "untag";
 }
+
 export async function rolling() {
   let processName = (await getCurrentProcss())[0];
   let name = processName;
@@ -69,8 +93,8 @@ export async function rolling() {
   return {
     name,
     target:target,
-    tag: getTag(name),
-    type: getType(name),
+    tag: await getTagByName(name),
+    type: await getTypeByName(name),
     start: Date.now(),
     duration: config.intervalSec
   };

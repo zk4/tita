@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { connect } from "react-redux";
-import { getTypes } from "../../util/configUtil";
+import { getCircleData } from "../../util/configUtil";
 
 class CircleStatistic extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class CircleStatistic extends Component {
   }
   async initXY() {
     this.resetY();
-    this.updateY(await getTypes());
+    this.updateY(await getCircleData());
   }
   updateY(events) {
     for (let event of events) {

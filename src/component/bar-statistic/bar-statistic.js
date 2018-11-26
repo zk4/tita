@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import moment from "moment";
 import { switchRefresh } from "../../redux/refresh.redux";
-import { getStat } from "../../util/configUtil";
+import { getBarData } from "../../util/configUtil";
 import { getMonthdays } from "../../util/timeUtil";
 
 const Option = Select.Option;
@@ -32,7 +32,7 @@ class BarStatistic extends Component {
   }
   async initXY() {
     this.resetY();
-    this.updateY(await getStat(this.state.timeGroupKey));
+    this.updateY(await getBarData(this.state.timeGroupKey));
   }
   async onTimeSelect(v) {
     this.setState({ timeGroupKey: v.key }, async () => {
@@ -52,6 +52,7 @@ class BarStatistic extends Component {
   }
 
   componentWillReceiveProps(props) {
+
     if (props.refresh) this.updateY([props.stat]);
     if (props.windowEvent === "focus") this.initXY();
   }
@@ -113,10 +114,13 @@ class BarStatistic extends Component {
       Neutral: [...this.state.data.Neutral],
       Distracting: [...this.state.data.Distracting]
     };
+   
     if (events) {
       for (let event of events) {
+       
         if (event) {
           const idx = moment(event.start).format(this.getTimeFormat());
+         
           data[event.type][idx] += event.duration;
         }
       }

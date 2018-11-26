@@ -36,8 +36,44 @@ export function saveConfig(content) {
   });
 }
 
-export async function getTypes(key = "day") {
-  //todo
+export async function getTag() {
+ 
+    return new Promise((resolve, reject) => {
+      db.serialize(function() {
+        db.all(
+          `SELECT
+         * from tag`,
+          function(err, row) {
+            if (err) {
+              return reject(err);
+            } else {
+                console.log(row)
+              return resolve(row);
+            }
+          }
+        );
+      });
+    });
+  }
+export async function getType() {
+ 
+    return new Promise((resolve, reject) => {
+      db.serialize(function() {
+        db.all(
+          `SELECT
+         * from type`,
+          function(err, row) {
+            if (err) {
+              return reject(err);
+            } else {
+              return resolve(row);
+            }
+          }
+        );
+      });
+    });
+  }
+export async function getCircleData(key = "day") {
   if (key === "week") key = "isoWeek";
   let from = moment()
     .startOf(key)
@@ -48,7 +84,20 @@ export async function getTypes(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  type,sum(duration) as duration FROM  event  where  start>${from} and start<${to} group by type`,
+        `SELECT
+        s.name AS name,
+        IFNULL(c.type_name,'Neutral') AS type ,
+        sum(s.duration) AS duration 
+    
+    FROM
+        event AS s
+        LEFT JOIN type AS c ON s.name == c.event_name 
+         
+    
+    WHERE
+        s.start > ${from} 
+        AND s.start < ${to}
+    group by type`,
         function(err, row) {
           if (err) {
             return reject(err);
@@ -60,8 +109,7 @@ export async function getTypes(key = "day") {
     });
   });
 }
-export async function getTop(key = "day") {
-  //todo
+export async function getTopData(key = "day") {
   if (key === "week") key = "isoWeek";
   let from = moment()
     .startOf(key)
@@ -72,7 +120,18 @@ export async function getTop(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  name,type,sum(duration) as duration FROM  event  where  start>${from} and start<${to} group by name`,
+        `SELECT
+        s.name AS name,
+        IFNULL(c.type_name,'Neutral') AS type ,
+        sum(s.duration) AS duration 
+    
+    FROM
+        event AS s
+        LEFT JOIN type AS c ON s.name == c.event_name 
+    WHERE
+        s.start > ${from} 
+        AND s.start < ${to}
+    group by name`,
         function(err, row) {
           if (err) {
             return reject(err);
@@ -84,7 +143,7 @@ export async function getTop(key = "day") {
     });
   });
 }
-export async function getStat(key = "day") {
+export async function getBarData(key = "day") {
   //todo
   if (key === "week") key = "isoWeek";
   let from = moment()
@@ -96,26 +155,41 @@ export async function getStat(key = "day") {
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
-        `SELECT  * FROM event as s where  s.start>${from} and s.start<${to} `,
+        `
+        SELECT
+            s.name AS name,
+            s.start AS start,
+            s.target AS target,
+            IFNULL(c.type_name,'Neutral') AS type ,
+            s.duration AS duration ,
+            IFNULL(t.tag_name , 'untag') as tag 
+        FROM
+            event AS s
+            LEFT JOIN type AS c ON s.name == c.event_name 
+            left join tag as t  on t.event_name == c.event_name
+        
+        WHERE
+            s.start > ${from} 
+            AND s.start < ${to}`,
         function(err, row) {
           if (err) {
             return reject(err);
           } else {
-            return resolve(row);
-          }
-        }
-      );
-    });
-  });
-}
 
+            return resolve(row);
+          }
+        }
+      );
+    });
+  });
+}
+ 
 let lastContnet = null;
 let lastID = null;
 export function saveEvent(content) {
-  // fs.writeFile(statDataFilePath, content);
   if (content) {
+
     if (lastContnet) {
-   
       if (
         content.name === lastContnet.name &&
         content.target === lastContnet.target &&
@@ -124,23 +198,24 @@ export function saveEvent(content) {
       ) {
         lastContnet.duration += content.duration;
         lastContnet.start = content.start;
-        console.log("same",lastID);
+
         db.run(
           `UPDATE "main"."event" SET "duration" = ${
             lastContnet.duration
-          } WHERE rowid = ${lastID}`
+          } WHERE rowid = ${lastID}`,(a,b)=>{
+              console.log(a,b)
+          }
         );
 
         return;
       }
     }
-    console.log("hit");
-    let sql = "INSERT INTO event VALUES (?,?,?,?,?,?)";
+
+    let sql = "INSERT INTO event VALUES (?,?,?,?)";
     var stmt = db.prepare(sql);
+    content.duration = 1;
     stmt.run(
       content.name,
-      content.tag,
-      content.type,
       content.duration,
       content.start,
       content.target,
@@ -150,7 +225,6 @@ export function saveEvent(content) {
     );
     stmt.finalize();
     lastContnet = content;
-  
   }
   // db.close();
 }

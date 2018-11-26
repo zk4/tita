@@ -24,8 +24,8 @@ function createWindow() {
     width: 160*SIZE_SCALE,
     height: 100*SIZE_SCALE,
     // titleBarStyle: "hidden",
-    minWidth: 160*SIZE_SCALE,
-    minHeight: 100*SIZE_SCALE,
+    // minWidth: 160*SIZE_SCALE,
+    // minHeight: 100*SIZE_SCALE,
     icon: path.join(__dirname, "../assets/icons/png/64x64.png")
   });
   mainWindow.loadURL(
