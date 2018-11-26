@@ -8,7 +8,7 @@ db.serialize(function() {
   try {
     db.run(`CREATE TABLE stat 
                 (name TEXT,
-                 category TEXT,
+                 tag TEXT,
                  type TEXT,
                  duration INT,
                  start DATETIME)`);

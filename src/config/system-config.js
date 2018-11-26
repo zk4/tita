@@ -3,7 +3,7 @@ export var sysConfig = {
       productive: ["stackoverflow.com", "mpv", "maginNote","Electron"],
       distracting: ["www.baidu.com","www.zhihu.com", "www.youtube.com", "www.pornhub.com"]
     },
-    categoryNameMaps: {
+    tagNameMaps: {
       web: ["百度", "淘宝", "知乎", "www.youtube.com"],
       video: [],
       devlopment: [],

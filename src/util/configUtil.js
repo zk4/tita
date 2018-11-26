@@ -36,12 +36,15 @@ export function saveConfig(content) {
   });
 }
 
-export async function getTypes(key='day') {
-   //todo
-   if(key==='week')
-   key='isoWeek'
-  let from =  moment().startOf(key).valueOf();
-  let to =  moment().endOf(key).valueOf();
+export async function getTypes(key = "day") {
+  //todo
+  if (key === "week") key = "isoWeek";
+  let from = moment()
+    .startOf(key)
+    .valueOf();
+  let to = moment()
+    .endOf(key)
+    .valueOf();
   return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
@@ -57,13 +60,16 @@ export async function getTypes(key='day') {
     });
   });
 }
-export async function getTop(key='day') {
- //todo
- if(key==='week')
- key='isoWeek' 
-  let from =  moment().startOf(key).valueOf();
-  let to =  moment().endOf(key).valueOf();
-return new Promise((resolve, reject) => {
+export async function getTop(key = "day") {
+  //todo
+  if (key === "week") key = "isoWeek";
+  let from = moment()
+    .startOf(key)
+    .valueOf();
+  let to = moment()
+    .endOf(key)
+    .valueOf();
+  return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
         `SELECT  name,type,sum(duration) as duration FROM  stat  where  start>${from} and start<${to} group by name`,
@@ -78,15 +84,16 @@ return new Promise((resolve, reject) => {
     });
   });
 }
-export async function getStat(key='day') {
+export async function getStat(key = "day") {
   //todo
-  if(key==='week')
-    key='isoWeek'
-
- console.log("key",key,moment().startOf(key).format())
-let from =  moment().startOf(key).valueOf();
-let to =  moment().endOf(key).valueOf();
- return new Promise((resolve, reject) => {
+  if (key === "week") key = "isoWeek";
+  let from = moment()
+    .startOf(key)
+    .valueOf();
+  let to = moment()
+    .endOf(key)
+    .valueOf();
+  return new Promise((resolve, reject) => {
     db.serialize(function() {
       db.all(
         `SELECT  * FROM stat as s where  s.start>${from} and s.start<${to} `,
@@ -110,7 +117,7 @@ export function saveStat(content) {
 
       stmt.run(
         content.name,
-        content.category,
+        content.tag,
         content.type,
         content.duration,
         content.start
@@ -124,4 +131,3 @@ export function saveStat(content) {
   }
   // db.close();
 }
-

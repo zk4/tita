@@ -50,11 +50,11 @@ function getType(name) {
 
   return "Neutral";
 }
-function getCategory(name) {
-  for (let key of Object.keys(config.categoryNameMaps)) {
-    if (config.categoryNameMaps[key].indexOf(name) !== -1) return key;
+function getTag(name) {
+  for (let key of Object.keys(config.tagNameMaps)) {
+    if (config.tagNameMaps[key].indexOf(name) !== -1) return key;
   }
-  return "uncategory";
+  return "untag";
 }
 export async function rolling() {
   let processName = (await getCurrentProcss())[0];
@@ -66,7 +66,7 @@ export async function rolling() {
   }
   return {
     name,
-    category: getCategory(name),
+    tag: getTag(name),
     type: getType(name),
     start: Date.now(),
     duration: config.intervalSec

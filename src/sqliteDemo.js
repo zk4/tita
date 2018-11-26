@@ -4,7 +4,7 @@ var db = new sqlite3.Database("./sqlite3.stat3");
 db.serialize(function() {
   db.run(`CREATE TABLE stat 
             (name TEXT,
-             category TEXT,
+             tag TEXT,
              type TEXT,
              duration INT,
              start DATETIME)`);
