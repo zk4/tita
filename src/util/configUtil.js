@@ -37,42 +37,40 @@ export function saveConfig(content) {
 }
 
 export async function getTag() {
- 
-    return new Promise((resolve, reject) => {
-      db.serialize(function() {
-        db.all(
-          `SELECT
+  return new Promise((resolve, reject) => {
+    db.serialize(function() {
+      db.all(
+        `SELECT
          * from tag`,
-          function(err, row) {
-            if (err) {
-              return reject(err);
-            } else {
-                console.log(row)
-              return resolve(row);
-            }
+        function(err, row) {
+          if (err) {
+            return reject(err);
+          } else {
+            console.log(row);
+            return resolve(row);
           }
-        );
-      });
+        }
+      );
     });
-  }
+  });
+}
 export async function getType() {
- 
-    return new Promise((resolve, reject) => {
-      db.serialize(function() {
-        db.all(
-          `SELECT
+  return new Promise((resolve, reject) => {
+    db.serialize(function() {
+      db.all(
+        `SELECT
          * from type`,
-          function(err, row) {
-            if (err) {
-              return reject(err);
-            } else {
-              return resolve(row);
-            }
+        function(err, row) {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve(row);
           }
-        );
-      });
+        }
+      );
     });
-  }
+  });
+}
 export async function getCircleData(key = "day") {
   if (key === "week") key = "isoWeek";
   let from = moment()
@@ -175,7 +173,6 @@ export async function getBarData(key = "day") {
           if (err) {
             return reject(err);
           } else {
-
             return resolve(row);
           }
         }
@@ -183,48 +180,49 @@ export async function getBarData(key = "day") {
     });
   });
 }
- 
+
 let lastContnet = null;
 let lastID = null;
+
+export function getLastContent() {
+  return lastContnet;
+}
 export function saveEvent(content) {
   if (content) {
+    if (
+      lastContnet &&
+      content.name === lastContnet.name &&
+      content.target === lastContnet.target &&
+      moment(content.start).get("hours") ===
+        moment(lastContnet.start).get("hours")
+    ) {
+      lastContnet.duration += content.duration;
+      lastContnet.start = content.start;
 
-    if (lastContnet) {
-      if (
-        content.name === lastContnet.name &&
-        content.target === lastContnet.target &&
-        moment(content.start).get("hours") ===
-          moment(lastContnet.start).get("hours")
-      ) {
-        lastContnet.duration += content.duration;
-        lastContnet.start = content.start;
-
-        db.run(
-          `UPDATE "main"."event" SET "duration" = ${
-            lastContnet.duration
-          } WHERE rowid = ${lastID}`,(a,b)=>{
-              console.log(a,b)
-          }
-        );
-
-        return;
-      }
+      db.run(
+        `UPDATE "main"."event" SET "duration" = ${
+          lastContnet.duration
+        } WHERE rowid = ${lastID}`,
+        (a, b) => {
+          console.log(a, b);
+        }
+      );
+    } else {
+      let sql = "INSERT INTO event VALUES (?,?,?,?)";
+      var stmt = db.prepare(sql);
+      content.duration = 1;
+      stmt.run(
+        content.name,
+        content.duration,
+        content.start,
+        content.target,
+        (s, err) => {
+          lastID = stmt.lastID;
+        }
+      );
+      stmt.finalize();
+      lastContnet = content;
     }
-
-    let sql = "INSERT INTO event VALUES (?,?,?,?)";
-    var stmt = db.prepare(sql);
-    content.duration = 1;
-    stmt.run(
-      content.name,
-      content.duration,
-      content.start,
-      content.target,
-      (s, err) => {
-        lastID = stmt.lastID;
-      }
-    );
-    stmt.finalize();
-    lastContnet = content;
   }
   // db.close();
 }

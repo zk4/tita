@@ -6913,6 +6913,10 @@ punycode@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
 
+python-shell@^1.0.6:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/python-shell/download/python-shell-1.0.6.tgz#5b366491b65fbbc88c12ff5ca5946a87478ff892"
+
 q@^1.1.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.0.tgz#dd01bac9d06d30e6f219aecb8253ee9ebdc308f1"
