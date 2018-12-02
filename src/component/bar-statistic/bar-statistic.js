@@ -12,13 +12,13 @@ const yMaxMaps = {
   day: 3600,
   week: 3600 * 24,
   month: 3600 * 24,
-  year: 3600 * 24 * 31 
+  year: 3600 * 24 * 31
 };
 class BarStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timeGroupKey: "month",
+      timeGroupKey: "day",
       data: {
         Productive: [],
         Neutral: [],
@@ -114,17 +114,16 @@ class BarStatistic extends Component {
       Neutral: [...this.state.data.Neutral],
       Distracting: [...this.state.data.Distracting]
     };
-   
+
     if (events) {
       for (let event of events) {
-       
         if (event) {
           const idx = moment(event.start).format(this.getTimeFormat());
-          console.log("idx",idx)
+
           data[event.type][idx] += event.duration;
         }
       }
-      console.log("data",data)
+
       this.setState({ data });
     }
   }
@@ -132,16 +131,16 @@ class BarStatistic extends Component {
   getOption() {
     return {
       toolbox: {
-        show : true,
-        feature : {
-            // mark : {show: true},
-            // dataView : {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            // restore : {show: true},
-            // saveAsImage : {show: true}
+        show: true,
+        feature: {
+          // mark : {show: true},
+          // dataView : {show: true, readOnly: false},
+          magicType: { show: true, type: ["line", "bar"] }
+          // restore : {show: true},
+          // saveAsImage : {show: true}
         }
-    },
-    
+      },
+
       tooltip: {
         trigger: "axis",
         axisPointer: {
@@ -215,7 +214,7 @@ class BarStatistic extends Component {
           style={{ height: "200px", width: "100%" }}
           className="react_for_echarts"
         />
-        <br></br>
+        <br />
         <div style={{ textAlign: "center" }}>
           <Select
             labelInValue
@@ -229,7 +228,6 @@ class BarStatistic extends Component {
             <Option value="year">year</Option>
           </Select>
 
-          
           {/* <Switch
             
             checkedChildren="刷新中"

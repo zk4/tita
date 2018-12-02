@@ -46,7 +46,7 @@ export async function getTag() {
           if (err) {
             return reject(err);
           } else {
-            console.log(row);
+
             return resolve(row);
           }
         }
