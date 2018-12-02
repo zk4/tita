@@ -88,13 +88,13 @@ class BarStatistic extends Component {
         this.xAxisCache[groupKey] = [...Array(24).keys()];
         break;
       case "week":
-        this.xAxisCache[groupKey] = [...Array(7).keys()];
+        this.xAxisCache[groupKey] = [...Array(7).keys()].map(x=>x+1);
         break;
       case "month":
-        this.xAxisCache[groupKey] = [...Array(getMonthdays()).keys()];
+        this.xAxisCache[groupKey] = [...Array(getMonthdays()).keys()].map(x=>x+1);
         break;
       case "year":
-        this.xAxisCache[groupKey] = [...Array(12).keys()];
+        this.xAxisCache[groupKey] = [...Array(12).keys()].map(x=>x+1);
         break;
       case "years":
         this.xAxisCache[groupKey] = [...Array(5).keys()].map(
@@ -119,16 +119,25 @@ class BarStatistic extends Component {
       for (let event of events) {
         if (event) {
           const idx = moment(event.start).format(this.getTimeFormat());
-
+          
           data[event.type][idx] += event.duration;
         }
       }
-
+       
       this.setState({ data });
     }
   }
 
   getOption() {
+    let Productive=this.state.data.Productive
+    let Distracting=this.state.data.Distracting
+    let Neutral=this.state.data.Neutral
+    if(this.state.timeGroupKey==="month" || this.state.timeGroupKey==="week"   ){
+      Productive.push(Productive.shift());
+      Distracting.push(Distracting.shift());
+      Neutral.push(Neutral.shift());
+    }
+    
     return {
       toolbox: {
         show: true,
@@ -186,21 +195,21 @@ class BarStatistic extends Component {
           type: "bar",
           stack: "总量",
 
-          data: this.state.data.Productive
+          data: Productive
         },
         {
           name: "Neutral",
           type: "bar",
           stack: "总量",
 
-          data: this.state.data.Neutral
+          data: Neutral
         },
         {
           name: "Distracting",
           type: "bar",
           stack: "总量",
 
-          data: this.state.data.Distracting
+          data: Distracting
         }
       ]
     };

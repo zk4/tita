@@ -177,7 +177,7 @@ export async function getBarData(key = "day") {
           if (err) {
             return reject(err);
           } else {
-            console.log("row",row)
+
             return resolve(row);
           }
         }
