@@ -11,7 +11,7 @@ import './index.css';
 import store from './redux/store'
 ReactDOM.render( (
   <Provider store={store}>
-<App store={store}></App>
+<App></App>
 </Provider>
 ), document.getElementById('root'));
 

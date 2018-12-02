@@ -898,9 +898,9 @@ babel-plugin-transform-async-to-generator@^6.22.0:
     babel-plugin-syntax-async-functions "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-class-properties@6.24.1:
+babel-plugin-transform-class-properties@6.24.1, babel-plugin-transform-class-properties@^6.24.1:
   version "6.24.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-class-properties/-/babel-plugin-transform-class-properties-6.24.1.tgz#6a79763ea61d33d36f37b611aa9def81a81b46ac"
+  resolved "http://registry.npm.taobao.org/babel-plugin-transform-class-properties/download/babel-plugin-transform-class-properties-6.24.1.tgz#6a79763ea61d33d36f37b611aa9def81a81b46ac"
   dependencies:
     babel-helper-function-name "^6.24.1"
     babel-plugin-syntax-class-properties "^6.8.0"
@@ -4103,6 +4103,12 @@ hoist-non-react-statics@^2.3.1:
   version "2.5.5"
   resolved "http://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
 
+hoist-non-react-statics@^3.0.0:
+  version "3.2.0"
+  resolved "http://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-3.2.0.tgz#d21b9fc72b50fdc38c5d88f6e2c52f2c2dbe5ee2"
+  dependencies:
+    react-is "^16.3.2"
+
 hoist-non-react-statics@^3.1.0:
   version "3.1.0"
   resolved "http://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-3.1.0.tgz#42414ccdfff019cd2168168be998c7b3bd5245c0"
@@ -5706,6 +5712,21 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mobx-react-devtools@^6.0.3:
+  version "6.0.3"
+  resolved "http://registry.npm.taobao.org/mobx-react-devtools/download/mobx-react-devtools-6.0.3.tgz#4d536c8cdd77d9f4b81f5e8415d7bedccc6a2a99"
+
+mobx-react@^5.4.2:
+  version "5.4.2"
+  resolved "http://registry.npm.taobao.org/mobx-react/download/mobx-react-5.4.2.tgz#53db594dbb44752c15b53c355babaa94a6af5934"
+  dependencies:
+    hoist-non-react-statics "^3.0.0"
+    react-lifecycles-compat "^3.0.2"
+
+mobx@^5.6.0:
+  version "5.6.0"
+  resolved "http://registry.npm.taobao.org/mobx/download/mobx-5.6.0.tgz#e381c357e0ed7685a99a896455ecc66ff5ab84ee"
 
 moment@2.x, moment@^2.22.2:
   version "2.22.2"

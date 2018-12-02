@@ -8,7 +8,7 @@ let config = getConfig();
 
 async function getCurrentProcss() {
   let cmd =
-    'tell application "System Events" to get name of application processes whose frontmost is true and visible is true';
+    'tell application "System Events" to get displayed name of application processes whose frontmost is true and visible is true';
   return await runAppleScript(cmd);
 }
 
@@ -110,3 +110,5 @@ export async function rolling() {
 //     console.log(await rolling());
 //   }, 2000);
 // })();
+
+(async ()=>getCurrentProcss())()

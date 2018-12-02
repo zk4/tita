@@ -93,7 +93,7 @@ export async function getCircleData(key = "day") {
          
     
     WHERE
-        s.start > ${from} 
+        s.start >= ${from} 
         AND s.start < ${to}
     group by type`,
         function(err, row) {
@@ -127,7 +127,7 @@ export async function getTopData(key = "day") {
         event AS s
         LEFT JOIN type AS c ON s.name == c.event_name 
     WHERE
-        s.start > ${from} 
+        s.start >= ${from} 
         AND s.start < ${to}
     group by name`,
         function(err, row) {
@@ -144,16 +144,17 @@ export async function getTopData(key = "day") {
 export async function getBarData(key = "day") {
   //todo
   if (key === "week") key = "isoWeek";
+   
   let from = moment()
     .startOf(key)
     .valueOf();
   let to = moment()
     .endOf(key)
     .valueOf();
+  
   return new Promise((resolve, reject) => {
     db.serialize(function() {
-      db.all(
-        `
+      const sql = `
         SELECT
             s.name AS name,
             s.start AS start,
@@ -167,12 +168,16 @@ export async function getBarData(key = "day") {
             left join tag as t  on t.event_name == c.event_name
         
         WHERE
-            s.start > ${from} 
-            AND s.start < ${to}`,
+            s.start >= ${from} 
+            AND s.start < ${to}`;
+        
+      db.all(
+        sql,
         function(err, row) {
           if (err) {
             return reject(err);
           } else {
+            console.log("row",row)
             return resolve(row);
           }
         }
@@ -202,10 +207,7 @@ export function saveEvent(content) {
       db.run(
         `UPDATE "main"."event" SET "duration" = ${
           lastContnet.duration
-        } WHERE rowid = ${lastID}`,
-        (a, b) => {
-          console.log(a, b);
-        }
+        } WHERE rowid = ${lastID}`
       );
     } else {
       let sql = "INSERT INTO event VALUES (?,?,?,?)";

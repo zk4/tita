@@ -18,7 +18,7 @@ class BarStatistic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timeGroupKey: "day",
+      timeGroupKey: "month",
       data: {
         Productive: [],
         Neutral: [],
@@ -52,7 +52,6 @@ class BarStatistic extends Component {
   }
 
   componentWillReceiveProps(props) {
-
     if (props.refresh) this.updateY([props.stat]);
     if (props.windowEvent === "focus") this.initXY();
   }
@@ -65,7 +64,7 @@ class BarStatistic extends Component {
       case "week":
         return "d";
       case "month":
-        return "DD";
+        return "D";
       case "year":
         return "M";
       default:
@@ -109,6 +108,7 @@ class BarStatistic extends Component {
   }
 
   updateY(events) {
+    // console.log("events",events)
     let data = {
       Productive: [...this.state.data.Productive],
       Neutral: [...this.state.data.Neutral],
@@ -120,10 +120,11 @@ class BarStatistic extends Component {
        
         if (event) {
           const idx = moment(event.start).format(this.getTimeFormat());
-         
+          console.log("idx",idx)
           data[event.type][idx] += event.duration;
         }
       }
+      console.log("data",data)
       this.setState({ data });
     }
   }
