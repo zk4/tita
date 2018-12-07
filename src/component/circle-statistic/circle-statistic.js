@@ -90,7 +90,7 @@ class CircleStatistic extends Component {
             { value: this.state.Productive, name: "Productive" },
             { value: this.state.Neutral, name: "Neutral" },
             { value: this.state.Distracting, name: "Distracting" },
-            { value: remain_secs-this.state.Neutral-this.state.Productive-this.state.Distracting, name: "Remaining" },
+            { value: remain_secs, name: "Remaining" },
             { value: unkown, name: "Unkown" }
           ]
         }
