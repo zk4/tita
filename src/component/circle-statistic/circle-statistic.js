@@ -9,7 +9,8 @@ class CircleStatistic extends Component {
     this.state = {
       Productive: 0,
       Neutral: 0,
-      Distracting: 0
+      Distracting: 0,
+      
     };
   }
   componentDidMount() {
@@ -44,6 +45,10 @@ class CircleStatistic extends Component {
     }
   }
   getOption() {
+    var dt = new Date();
+    const passed_sec = (dt.getSeconds() + (60 * dt.getMinutes()) + (60 * 60 * dt.getHours()));
+    var remain_secs = 86400-passed_sec;
+    var unkown=passed_sec-(this.state.Neutral+this.state.Productive+this.state.Distracting);
     return {
       tooltip: {
         trigger: "item",
@@ -52,7 +57,7 @@ class CircleStatistic extends Component {
       legend: {
         orient: "vertical",
         x: "left",
-        data: ["Productive", "Neutral", "Distracting"],
+        data: ["Productive", "Neutral", "Distracting","Remaining","Unkown"],
         show: false
       },
       series: [
@@ -79,12 +84,14 @@ class CircleStatistic extends Component {
               show: false
             }
           },
-          color: ["#9DE949", "#23BBD8", "#FF6377"],
+          color: ["#9DE949", "#23BBD8", "#FF6377","#eee","#777"],
 
           data: [
             { value: this.state.Productive, name: "Productive" },
             { value: this.state.Neutral, name: "Neutral" },
-            { value: this.state.Distracting, name: "Distracting" }
+            { value: this.state.Distracting, name: "Distracting" },
+            { value: remain_secs-this.state.Neutral-this.state.Productive-this.state.Distracting, name: "Remaining" },
+            { value: unkown, name: "Unkown" }
           ]
         }
       ]
