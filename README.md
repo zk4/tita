@@ -1,6 +1,7 @@
 # Tita
 A free version of Qbserve.
 
+![](https://github.com/zk4/tita/blob/master/demo.jpg?raw=true)
 
 This App was written in JS with react + electron a few years ago.
 None of those my specialized aera.
