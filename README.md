@@ -1,11 +1,19 @@
-# React + Electron = 😍
+# Tita
+A free version of Qbserve.
 
-An example of using create-react-app and Electron.  
-Made by [Kitze](https://twitter.com/thekitze).
 
-## Scripts
-```yarn start``` will start the Electron app and the React app at the same time.  
-```yarn build``` will build the React app and package it along the Electron app.
+This App was written in JS with react + electron a few years ago.
+None of those my specialized aera.
 
-## Read more
-You can read more about it in [my Medium article](https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3).
+
+Consider rewrite it to a more sofiscated level.
+
+
+But this old version did do it's job on Mac. I can promise that.
+
+
+compare to Observe
+- support mpv monitor from command startup.
+- Free!
+- smaller cpu load when in backgroud.
+
